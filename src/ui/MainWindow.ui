@@ -51,7 +51,7 @@
      <x>0</x>
      <y>0</y>
      <width>1080</width>
-     <height>22</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuMGround">
@@ -136,10 +136,23 @@
     <addaction name="actionFullscreen"/>
     <addaction name="actionNormal"/>
    </widget>
+   <widget class="QMenu" name="menuEvents_Detection">
+    <property name="title">
+     <string>Events Detection</string>
+    </property>
+    <widget class="QMenu" name="menuFire">
+     <property name="title">
+      <string>Fire</string>
+     </property>
+     <addaction name="actionFlame_Recognition"/>
+    </widget>
+    <addaction name="menuFire"/>
+   </widget>
    <addaction name="menuMGround"/>
    <addaction name="menuNetwork"/>
    <addaction name="menuPerspectives"/>
    <addaction name="menuTools"/>
+   <addaction name="menuEvents_Detection"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
@@ -602,6 +615,11 @@
   <action name="actionDonate">
    <property name="text">
     <string>Donate</string>
+   </property>
+  </action>
+  <action name="actionFlame_Recognition">
+   <property name="text">
+    <string>Flame Recognition</string>
    </property>
   </action>
  </widget>

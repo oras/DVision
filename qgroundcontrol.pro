@@ -452,7 +452,8 @@ FORMS += \
     src/ui/DroneshareUploadDialog.ui \
     src/ui/DroneshareDialog.ui \
     src/ui/uas/PreFlightCalibrationDialog.ui \
-    src/ui/configuration/RadioFlashWizard.ui
+    src/ui/configuration/RadioFlashWizard.ui \
+    src/ui/firereco.ui
 
 HEADERS += \
     src/MG.h \
@@ -681,7 +682,9 @@ HEADERS += \
     src/comm/LinkManagerFactory.h \
     src/ui/VibrationMonitor.h \
     src/ui/EKFMonitor.h \
-    src/Settings.h
+    src/Settings.h \
+    src/ui/firereco.h \
+    src/ImgRecoTool.h
 
 SOURCES += src/main.cc \
     src/QGCCore.cc \
@@ -903,7 +906,9 @@ SOURCES += src/main.cc \
     src/comm/LinkManagerFactory.cpp \
     src/ui/VibrationMonitor.cpp \
     src/ui/EKFMonitor.cpp \
-    src/Settings.cpp
+    src/Settings.cpp \
+    src/ui/firereco.cpp \
+    src/ImgRecoTool.cpp
 
 MacBuild | WindowsBuild : contains(GOOGLEEARTH, enable) { #fix this to make sense ;)
     message(Including support for Google Earth)
@@ -970,5 +975,9 @@ OTHER_FILES += \
 
 DISTFILES += \
     qml/components/BarGauge.qml
+
+INCLUDEPATH += /usr/local/include/opencv
+
+LIBS += -L/usr/local/lib -lopencv_core -lopencv_imgproc -lopencv_imgcodecs -lopencv_highgui
 
 
