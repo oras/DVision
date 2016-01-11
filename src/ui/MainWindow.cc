@@ -67,6 +67,7 @@ This file is part of the QGROUNDCONTROL project
 
 #include "AboutDialog.h"
 #include "DroneshareDialog.h"
+#include "FireFlameReco.h"
 
 // FIXME Move
 #include "PxQuadMAV.h"
@@ -1716,6 +1717,9 @@ void MainWindow::connectCommonActions()
     connect(ui.actionReloadStylesheet, SIGNAL(triggered()), this, SLOT(reloadStylesheet()));
     connect(ui.actionSelectStylesheet, SIGNAL(triggered()), this, SLOT(selectStylesheet()));
 
+    // Events Detection
+    connect(ui.actionFlame_Recognition,SIGNAL(triggerd()),this, SLOT(on_actionFlame_Recognition_triggered()));
+
     // Help Actions
     connect(ui.actionOnline_Documentation, SIGNAL(triggered()), this, SLOT(showHelp()));
     connect(ui.actionDeveloper_Credits, SIGNAL(triggered()), this, SLOT(showCredits()));
@@ -2503,4 +2507,14 @@ void MainWindow::closeTerminalConsole()
         m_terminalDialog->deleteLater();
         m_terminalDialog = NULL;
     }
+}
+
+
+void MainWindow::on_actionFlame_Recognition_triggered()
+{
+    FireFlameReco* flame = new FireFlameReco(this);
+    flame->exec();
+    flame->hide();
+    delete flame;
+    flame = NULL;
 }

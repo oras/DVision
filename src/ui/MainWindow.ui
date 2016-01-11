@@ -144,6 +144,7 @@
      <property name="title">
       <string>Fire</string>
      </property>
+     <addaction name="separator"/>
      <addaction name="actionFlame_Recognition"/>
     </widget>
     <addaction name="menuFire"/>

@@ -453,7 +453,7 @@ FORMS += \
     src/ui/DroneshareDialog.ui \
     src/ui/uas/PreFlightCalibrationDialog.ui \
     src/ui/configuration/RadioFlashWizard.ui \
-    src/ui/firereco.ui
+    src/ui/FireFlameReco.ui
 
 HEADERS += \
     src/MG.h \
@@ -683,8 +683,8 @@ HEADERS += \
     src/ui/VibrationMonitor.h \
     src/ui/EKFMonitor.h \
     src/Settings.h \
-    src/ui/firereco.h \
-    src/ImgRecoTool.h
+    src/ImgRecoTool.h \
+    src/ui/FireFlameReco.h
 
 SOURCES += src/main.cc \
     src/QGCCore.cc \
@@ -907,8 +907,8 @@ SOURCES += src/main.cc \
     src/ui/VibrationMonitor.cpp \
     src/ui/EKFMonitor.cpp \
     src/Settings.cpp \
-    src/ui/firereco.cpp \
-    src/ImgRecoTool.cpp
+    src/ImgRecoTool.cpp \
+    src/ui/FireFlameReco.cc
 
 MacBuild | WindowsBuild : contains(GOOGLEEARTH, enable) { #fix this to make sense ;)
     message(Including support for Google Earth)

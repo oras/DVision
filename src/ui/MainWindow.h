@@ -477,6 +477,8 @@ private slots:
     void showTerminalConsole();
     void closeTerminalConsole();
 
+    void on_actionFlame_Recognition_triggered();
+
 private:
     bool m_heartbeatEnabled;
     QList<QObject*> commsWidgetList;

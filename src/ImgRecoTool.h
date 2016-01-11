@@ -1,8 +1,20 @@
+/*=============================================================================
+ * EVENTS DITECTION USING THE GROUNDCONTROL PROJECT
+ *
+ * This code is part of the JCE Software & Computer Enginnering Department
+ * research project, Written by Asnin Or All rights 2015-2016.
+ *
+ * www.jce.ac.il
+ *
+ * This is an image processing Tool Box using the OpenCV libraty project
+===============================================================================*/
+
 #ifndef IMGRECOTOOL_H
 #define IMGRECOTOOL_H
 
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/highgui/highgui.hpp"
+#include "opencv2/imgproc/types_c.h"
 #include "opencv2/imgcodecs.hpp"
 #include <opencv2/opencv.hpp>
 #include <opencv/cv.h>
@@ -12,9 +24,13 @@
 #include <iostream>
 #include <vector>
 #include <unistd.h>
+#include <QImage>
+#include <QPixmap>
 
 using namespace cv;
 using namespace std;
+
+
 
 class Node{
     public:
@@ -35,24 +51,28 @@ class Node{
     }
 };
 
+namespace irt{
+
 class ImgRecoTool{
-    int lowThreshold;
     public:
-        ImgRecoTool();
+       static Mat hsiTransform(Mat &src);
 
-        Mat hsiTransform(Mat &src);
+        static Mat getRGBHistogram(Mat &src);
 
-        Mat getRGBHistogram(Mat &src);
+        static Mat getImageChannel(Mat mat,int num);
 
-        Mat getImageChannel(Mat mat,int num);
+        static Node* getSaliencyMap(Mat &srcImg, int scan, int thresh);
 
-        Node* getSaliencyMap(Mat &srcImg, int scan);
-
-        void drawSaliencyDatas(Node *squares, Mat &src);
+        static void drawSaliencyDatas(Node *squares, Mat &src);
 
         Mat CannyThreshold(int,void*,Mat &src);
+
+        static QImage cvMatToQImage(const Mat &inMat);
+
+        static Mat QImageToCvMat( const QImage &inImage, bool inCloneImageData = true );
     private:
-        int **pointInSquare(int x,int y, Node *squares);
+        static int **pointInSquare(int x,int y, Node *squares);
 };
+}
 
 #endif // IMGRECOTOOL_H
