@@ -67,7 +67,7 @@ This file is part of the QGROUNDCONTROL project
 
 #include "AboutDialog.h"
 #include "DroneshareDialog.h"
-#include "FireFlameReco.h"
+#include "HorizonSettings.h"
 
 // FIXME Move
 #include "PxQuadMAV.h"
@@ -86,6 +86,8 @@ This file is part of the QGROUNDCONTROL project
 #include <QGCHilConfiguration.h>
 #include <QGCHilFlightGearConfiguration.h>
 
+
+
 #define PFD_QML
 
 MainWindow* MainWindow::instance(QSplashScreen* screen)
@@ -100,6 +102,7 @@ MainWindow* MainWindow::instance(QSplashScreen* screen)
                  * will be destroyed when the main application exits */
         //_instance->setParent(qApp);
     }
+
     return _instance;
 }
 
@@ -1719,6 +1722,9 @@ void MainWindow::connectCommonActions()
 
     // Events Detection
     connect(ui.actionFlame_Recognition,SIGNAL(triggerd()),this, SLOT(on_actionFlame_Recognition_triggered()));
+    connect(ui.actionFlame,SIGNAL(triggerd()),this, SLOT(on_actionFlame_triggered()));
+    connect(ui.actionStart_Detection,SIGNAL(triggerd()),this, SLOT(on_actionStart_Detection_triggered()));
+    connect(ui.actionHorizon_Settings,SIGNAL(triggerd()),this, SLOT(on_actionHorizon_Settings_triggered()));
 
     // Help Actions
     connect(ui.actionOnline_Documentation, SIGNAL(triggered()), this, SLOT(showHelp()));
@@ -2510,11 +2516,53 @@ void MainWindow::closeTerminalConsole()
 }
 
 
-void MainWindow::on_actionFlame_Recognition_triggered()
+void MainWindow::on_actionFlame_Recognition_triggered(){
+    if(this->flame!=NULL){
+         this->flame->exec();
+    }
+    else{
+        this->flame = new FireFlameReco(this);
+        this->flame->exec();
+    }
+}
+
+void MainWindow::on_actionFlame_triggered(){
+    /*QMessageBox msgBox;
+    msgBox.setText("The document has been modified.");
+    msgBox.setInformativeText("Do you want to save your changes?");
+    msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+    msgBox.setDefaultButton(QMessageBox::Save);
+    int ret = msgBox.exec();*/
+
+   // detection.registerNewEventToDetect("Flame");
+
+
+}
+
+void MainWindow::on_actionStart_Detection_triggered(){
+    if(ui.actionStart_Detection->text()=="Stop Detection")
+        ui.actionStart_Detection->setText("Start Detection");
+    else
+        ui.actionStart_Detection->setText("Stop Detection");
+
+    //detection.startDetection();
+}
+
+void MainWindow::on_actionHorizon_Settings_triggered(){
+    HorizonSettings* horizon;
+
+    if(this->flame!=NULL)
+         horizon = new HorizonSettings(this,this->flame->getSaliencyMapRoot());
+    else
+       horizon = new HorizonSettings(this,NULL);
+
+    horizon->exec();
+    horizon->hide();
+    delete horizon;
+    horizon = NULL;
+}
+
+void MainWindow::on_actionRecognize_Smoke_triggered()
 {
-    FireFlameReco* flame = new FireFlameReco(this);
-    flame->exec();
-    flame->hide();
-    delete flame;
-    flame = NULL;
+
 }

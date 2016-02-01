@@ -31,6 +31,7 @@ This file is part of the QGROUNDCONTROL project
 #ifndef _MAINWINDOW_H_
 #define _MAINWINDOW_H_
 
+//#include "FireFlameReco.h"
 #include "AutoUpdateCheck.h"
 #include "AutoUpdateDialog.h"
 #include <QtWidgets/QMainWindow>
@@ -39,6 +40,7 @@ This file is part of the QGROUNDCONTROL project
 #include <QSettings>
 #include <qlist.h>
 #include <QNetworkProxy>
+#include <EventsDetection.h>
 
 #include "ui_MainWindow.h"
 //#include "LinkManager.h"
@@ -86,6 +88,11 @@ This file is part of the QGROUNDCONTROL project
 #include "ApmSoftwareConfig.h"
 #include "ApmToolBar.h"
 #include "DebugOutput.h"
+#include <EventsDetection.h>
+#include <QThread>
+#include <QtConcurrent/qtconcurrentrun.h>
+#include <ImgRecoTool.h>
+#include <FireFlameReco.h>
 
 class QGCMapTool;
 class QGCMAVLinkMessageSender;
@@ -104,6 +111,7 @@ class MainWindow : public QMainWindow
 
 public:
     static MainWindow* instance(QSplashScreen* screen = 0);
+    FireFlameReco* flame=NULL;
     ~MainWindow();
 
     enum QGC_MAINWINDOW_STYLE
@@ -360,6 +368,8 @@ protected:
     QPointer<LinkInterface> udpLink;
 
     QSettings settings;
+    EventsDetection detection;
+    QFuture<void> trDetect;
     QPointer<QStackedWidget> centerStack;
     QPointer<QActionGroup> centerStackActionGroup;
 
@@ -468,6 +478,7 @@ protected:
     QPointer<QGCFlightGearLink> fgLink;
     QTimer windowNameUpdateTimer;
 
+
 private slots:
     void showAutoUpdateDownloadDialog(QString version, QString releaseType, QString url, QString name);
     void autoUpdateCancelled(QString version);
@@ -478,6 +489,14 @@ private slots:
     void closeTerminalConsole();
 
     void on_actionFlame_Recognition_triggered();
+
+    void on_actionFlame_triggered();
+
+    void on_actionStart_Detection_triggered();
+
+    void on_actionHorizon_Settings_triggered();
+
+    void on_actionRecognize_Smoke_triggered();
 
 private:
     bool m_heartbeatEnabled;
@@ -498,6 +517,7 @@ private:
 
     DroneshareDialog* m_droneshareDialog;
     QDialog* m_terminalDialog;
+
 
 };
 

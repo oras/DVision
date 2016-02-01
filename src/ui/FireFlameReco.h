@@ -29,9 +29,12 @@ class FireFlameReco : public QDialog
 private:
     QString default_img;     // Store the name of the default image.
     int binaryImgThreshold;
-    QGraphicsScene* scene;
+    float resolution;
+    bool scanMethode;
 public:
-    explicit FireFlameReco(QWidget *parent = 0);
+    Node *root;
+    QGraphicsScene* scene;
+    explicit FireFlameReco(QWidget *parent);
     ~FireFlameReco();
 
     void setDefaultImg(QString name);
@@ -48,6 +51,7 @@ public:
 
     bool getScanMethod();
 
+    Node *getSaliencyMapRoot();
 private slots:
     void on_horizontalSlider_actionTriggered(int action);
 
@@ -59,6 +63,11 @@ private slots:
 
     void on_pushButton_5_clicked();
 
+    void on_pushButton_4_clicked();
+
+    void on_horizontalSlider_2_actionTriggered(int action);
+
+    void on_horizontalSlider_3_actionTriggered(int action);
 private:
     Ui::FireFlameReco *ui;
 
@@ -67,5 +76,7 @@ private:
     void updateDemoImage();
 
     void freeNodeLinkedList(Node *root);
+
+    void updateImage(Mat &src);
 };
 #endif // FIREFLAMERECO_H

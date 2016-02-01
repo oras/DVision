@@ -21,6 +21,8 @@ FireFlameReco::FireFlameReco(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::FireFlameReco)
 {
+    this->root=NULL;
+
     // Read default img from disk.
     loadDiskDefaultImg();
 
@@ -28,8 +30,12 @@ FireFlameReco::FireFlameReco(QWidget *parent) :
     ui->lcdNumber->display(1);
     ui->horizontalSlider->setRange(1,255);
     ui->horizontalSlider->setSingleStep(1);
+    ui->rbDiagonal->setChecked(true);
 
     connect(ui->horizontalSlider,SIGNAL(valueChanged(int)),this,SLOT(on_horizontalSlider_actionTriggered(int)));
+    connect(ui->horizontalSlider_2,SIGNAL(valueChanged(int)),this,SLOT(on_horizontalSlider_2_actionTriggered(int)));
+    connect(ui->horizontalSlider_3,SIGNAL(valueChanged(int)),this,SLOT(on_horizontalSlider_3_actionTriggered(int)));
+    connect(ui->pushButton_4,SIGNAL(valueChanged(int)),this,SLOT(on_pushButton_4_clicked()));
 
     this->scene = new QGraphicsScene();
     QPixmap m(this->default_img);
@@ -38,6 +44,8 @@ FireFlameReco::FireFlameReco(QWidget *parent) :
     ui->graphicsView->setScene(this->scene);
 
     ui->lcdNumber->setStyleSheet("*{background-color: #69EF5A;}");
+    ui->lcdNumber_2->setStyleSheet("*{background-color: #69EF5A;}");
+    ui->lcdNumber_3->setStyleSheet("*{background-color: #69EF5A;}");
 }
 
 void FireFlameReco::setDefaultImg(QString name){
@@ -81,13 +89,16 @@ FireFlameReco::~FireFlameReco()
 }
 
 
-void FireFlameReco::on_horizontalSlider_sliderReleased()
-{
+void FireFlameReco::on_horizontalSlider_sliderReleased(){
+    if(this->root!=NULL){
+        freeNodeLinkedList(this->root);
+    }
+
     Mat src=imread(getDefaultImg().toStdString());
 
-    Node *root=ImgRecoTool::getSaliencyMap(src,getScanMethod(),getBinaryImgThreshold());
+    this->root=ImgRecoTool::getSaliencyMap(src,getScanMethod(),getBinaryImgThreshold());
 
-    ImgRecoTool::drawSaliencyDatas(root,src);
+    ImgRecoTool::drawSaliencyDatas(this->root,src);
 
     QImage img=ImgRecoTool::cvMatToQImage(src);
 
@@ -98,10 +109,6 @@ void FireFlameReco::on_horizontalSlider_sliderReleased()
     scene->addPixmap(m.scaled(ui->graphicsView->width()-1,ui->graphicsView->height()-1));
 
     ui->graphicsView->setScene(this->scene);
-
-    freeNodeLinkedList(root);
-
-    delete root;
 }
 
 void FireFlameReco::updateDemoImage(){
@@ -154,14 +161,43 @@ void FireFlameReco::on_pushButton_5_clicked(){
    this->close();
 }
 
-void FireFlameReco::freeNodeLinkedList(Node *root){
-    Node *temp1 = root->next;
-
-    while(temp1!=NULL) // as I am considering tail->next = NULL
-    {
-        root->next = temp1->next;
-        temp1->next = NULL;
-        free(temp1);
-        temp1 = root->next;
+void FireFlameReco::freeNodeLinkedList(Node *p){
+    Node* toDelete = p;
+    while(toDelete != NULL) {
+        Node* next = toDelete->next;
+        delete toDelete;
+        toDelete = next;
     }
+}
+
+void FireFlameReco::on_pushButton_4_clicked(){
+    Mat src=imread(getDefaultImg().toStdString());
+    ImgRecoTool::markRGBflameAreas(src,this->root,src.rows);
+
+    updateImage(src);
+}
+
+void FireFlameReco::updateImage(Mat &src){
+    QImage img=ImgRecoTool::cvMatToQImage(src);
+
+    // Update demonstraion image view
+    this->scene= new QGraphicsScene();
+    QPixmap m(QPixmap::fromImage(img));
+    scene->addPixmap(m.scaled(ui->graphicsView->width()-1,ui->graphicsView->height()-1));
+
+    ui->graphicsView->setScene(this->scene);
+}
+
+void FireFlameReco::on_horizontalSlider_2_actionTriggered(int action)
+{
+     ui->lcdNumber_2->display(action);
+}
+
+void FireFlameReco::on_horizontalSlider_3_actionTriggered(int action)
+{
+    ui->lcdNumber_3->display(action);
+}
+
+Node *FireFlameReco::getSaliencyMapRoot(){
+    return this->root;
 }

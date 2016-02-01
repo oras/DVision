@@ -405,5 +405,48 @@ namespace irt{
           }
 
           return Mat();
-       }
+    }
+
+    void ImgRecoTool::transferToBinaryImage(int val, Mat &src){
+      threshold(getImageChannel(src,2),src,val,255,0);
+    }
+
+    void ImgRecoTool::markRGBflameAreas(Mat &src, Node *areas, int horizon){
+        const int R=112, G=238, B=28;		//RGB mark of flame color.
+        const int minR=243, maxR=255,		//RGB rule of flame color detection.
+                  minG=148, maxG=255,
+                  minB=72, maxB=183;
+
+
+
+        float r,g,b, gr, br;
+
+        int sum=0;
+
+        horizon=src.rows-horizon-1;
+
+        for(Node *p=areas;p!=NULL;p=p->next){
+            for(int i=(int)p->data[0][1];i<=(int)p->data[1][1] && i<src.rows;i++){
+                for(int j=(int)p->data[0][0];j<=(int)p->data[1][0] && j<src.cols;j++){
+                    b=src.at<Vec3b>(i,j)[0];
+                    g=src.at<Vec3b>(i,j)[1];
+                    r=src.at<Vec3b>(i,j)[2];
+
+                    gr=g/(r+1);
+                    br=b/(r+1);
+
+                    if((i>horizon)&& (((r>=minR && r<=maxR) && (g>=minG && g<=maxG) && (b>=minB && b<=maxB)) ||
+                            ((gr>=0.4 && gr<=0.8) && (br>=0 && br<=0.5) && (r>200) && (g<200) && (b<100)))){
+
+                        src.at<Vec3b>(i,j)[0]=R;
+                        src.at<Vec3b>(i,j)[1]=G;
+                        src.at<Vec3b>(i,j)[2]=B;
+                        sum++;
+                    }
+                }
+            }
+        }
+    }
 }
+
+

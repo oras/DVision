@@ -67,9 +67,13 @@ class ImgRecoTool{
 
         Mat CannyThreshold(int,void*,Mat &src);
 
+        static void transferToBinaryImage(int val, Mat &src);
+
         static QImage cvMatToQImage(const Mat &inMat);
 
         static Mat QImageToCvMat( const QImage &inImage, bool inCloneImageData = true );
+
+        static void markRGBflameAreas(Mat &src, Node *areas, int horizon);
     private:
         static int **pointInSquare(int x,int y, Node *squares);
 };

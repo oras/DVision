@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>473</width>
+    <width>704</width>
     <height>175</height>
    </rect>
   </property>
@@ -18,7 +18,7 @@
     <rect>
      <x>16</x>
      <y>13</y>
-     <width>441</width>
+     <width>676</width>
      <height>140</height>
     </rect>
    </property>
@@ -40,7 +40,7 @@
          </font>
         </property>
         <property name="text">
-         <string>APM Planner 2.0.0</string>
+         <string>APM Planner 2.0.0 Events Detection Version</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>

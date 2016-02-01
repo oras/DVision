@@ -453,7 +453,9 @@ FORMS += \
     src/ui/DroneshareDialog.ui \
     src/ui/uas/PreFlightCalibrationDialog.ui \
     src/ui/configuration/RadioFlashWizard.ui \
-    src/ui/FireFlameReco.ui
+    src/ui/FireFlameReco.ui \
+    src/ui/HorizonSettings.ui \
+    src/ui/FireHeatReco.ui
 
 HEADERS += \
     src/MG.h \
@@ -684,7 +686,14 @@ HEADERS += \
     src/ui/EKFMonitor.h \
     src/Settings.h \
     src/ImgRecoTool.h \
-    src/ui/FireFlameReco.h
+    src/ui/FireFlameReco.h \
+    src/EventsDetection.h \
+    src/Event.h \
+    src/Position.h \
+    src/Horizon.h \
+    src/EventFactory.h \
+    src/ui/HorizonSettings.h \
+    src/ui/FireHeatReco.h
 
 SOURCES += src/main.cc \
     src/QGCCore.cc \
@@ -908,7 +917,13 @@ SOURCES += src/main.cc \
     src/ui/EKFMonitor.cpp \
     src/Settings.cpp \
     src/ImgRecoTool.cpp \
-    src/ui/FireFlameReco.cc
+    src/ui/FireFlameReco.cc \
+    src/EventsDetection.cpp \
+    src/Event.cpp \
+    src/Position.cpp \
+    src/Horizon.cpp \
+    src/ui/HorizonSettings.cc \
+    src/ui/FireHeatReco.cpp
 
 MacBuild | WindowsBuild : contains(GOOGLEEARTH, enable) { #fix this to make sense ;)
     message(Including support for Google Earth)

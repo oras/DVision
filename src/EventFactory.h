@@ -1,11 +1,20 @@
-#ifndef EVENTFACTORY_H
-#define EVENTFACTORY_H
+#include <string>
+#include <Event.h>
 
+using namespace std;
 
-class EventFactory
-{
+class EventFactory{
+
 public:
-    EventFactory();
-};
 
-#endif // EVENTFACTORY_H
+    static Event *newEvent(const string &description){
+        if(description=="Flame")
+            return new Flame();
+        else if(description=="Smoke")
+            return new Smoke();
+        else if(description=="Heat")
+            return new Heat();
+
+        return NULL;
+    }
+};
