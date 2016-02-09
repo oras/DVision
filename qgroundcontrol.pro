@@ -455,7 +455,9 @@ FORMS += \
     src/ui/configuration/RadioFlashWizard.ui \
     src/ui/FireFlameReco.ui \
     src/ui/HorizonSettings.ui \
-    src/ui/FireHeatReco.ui
+    src/ui/FireHeatReco.ui \
+    src/ui/FireSmokeReco.ui \
+    src/ui/VideoCapt.ui
 
 HEADERS += \
     src/MG.h \
@@ -693,7 +695,9 @@ HEADERS += \
     src/Horizon.h \
     src/EventFactory.h \
     src/ui/HorizonSettings.h \
-    src/ui/FireHeatReco.h
+    src/ui/FireHeatReco.h \
+    src/ui/FireSmokeReco.h \
+    src/ui/VideoCapt.h
 
 SOURCES += src/main.cc \
     src/QGCCore.cc \
@@ -923,7 +927,9 @@ SOURCES += src/main.cc \
     src/Position.cpp \
     src/Horizon.cpp \
     src/ui/HorizonSettings.cc \
-    src/ui/FireHeatReco.cpp
+    src/ui/FireHeatReco.cpp \
+    src/ui/FireSmokeReco.cc \
+    src/ui/VideoCapt.cc
 
 MacBuild | WindowsBuild : contains(GOOGLEEARTH, enable) { #fix this to make sense ;)
     message(Including support for Google Earth)
@@ -995,4 +1001,6 @@ INCLUDEPATH += /usr/local/include/opencv
 
 LIBS += -L/usr/local/lib -lopencv_core -lopencv_imgproc -lopencv_imgcodecs -lopencv_highgui
 
+QT += core gui multimedia
 
+QT += multimediawidgets

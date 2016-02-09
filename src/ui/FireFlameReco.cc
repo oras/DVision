@@ -73,7 +73,7 @@ QString FireFlameReco::getDefaultImg(){
 
 void FireFlameReco::on_horizontalSlider_actionTriggered(int action)
 {
-    setBinaryImgThreshold(action);
+    this->binaryImgThreshold=action;
     ui->lcdNumber->display(action);
 }
 
@@ -94,7 +94,7 @@ void FireFlameReco::on_horizontalSlider_sliderReleased(){
         freeNodeLinkedList(this->root);
     }
 
-    Mat src=imread(getDefaultImg().toStdString());
+    Mat src=imread(this->default_img.toStdString());
 
     this->root=ImgRecoTool::getSaliencyMap(src,getScanMethod(),getBinaryImgThreshold());
 

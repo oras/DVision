@@ -300,10 +300,11 @@ namespace irt{
     }
 
 
-    Mat ImgRecoTool::CannyThreshold(int,void*,Mat &src){
+    void ImgRecoTool::CannyThreshold(int lowThreshold,Mat &src){
         Mat detected_edges,src_gray, dstDOG;
         int ratio=3,kernel_size=3;
-        int lowThreshold;
+
+        src_gray=getImageChannel(src,2);
 
         //Reduce noise with a kernel 3x3
         blur(src_gray, detected_edges, Size(3,3) );
@@ -314,9 +315,9 @@ namespace irt{
         //Using Canny's output as a mask, we display our result
         dstDOG = Scalar::all(0);
 
-        src.copyTo( dstDOG, detected_edges);
+        src.copyTo(dstDOG, detected_edges);
 
-        return dstDOG;
+        src=dstDOG.clone();
     }
 
 /*
@@ -446,6 +447,21 @@ namespace irt{
                 }
             }
         }
+    }
+
+    void ImgRecoTool::contrast(Mat &src, int val){
+        const int COLOR_NUM=3;
+        const int C=259;
+        const int C2=255;
+        const int C3=128;
+        const float FACTOR=(C*(val + C2))/(C2*(C-val));
+        for(int i=0;i<src.rows;i++)
+            for(int j=0;j<src.cols;j++)
+                for(int c=0;c<COLOR_NUM;c++){
+                    src.at<Vec3b>(i,j)[c]=
+                            saturate_cast<uchar>(FACTOR*(src.at<Vec3b>(i,j)[c]-C3)+C3);
+                }
+
     }
 }
 

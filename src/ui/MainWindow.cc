@@ -68,6 +68,7 @@ This file is part of the QGROUNDCONTROL project
 #include "AboutDialog.h"
 #include "DroneshareDialog.h"
 #include "HorizonSettings.h"
+#include "FireSmokeReco.h"
 
 // FIXME Move
 #include "PxQuadMAV.h"
@@ -1725,6 +1726,7 @@ void MainWindow::connectCommonActions()
     connect(ui.actionFlame,SIGNAL(triggerd()),this, SLOT(on_actionFlame_triggered()));
     connect(ui.actionStart_Detection,SIGNAL(triggerd()),this, SLOT(on_actionStart_Detection_triggered()));
     connect(ui.actionHorizon_Settings,SIGNAL(triggerd()),this, SLOT(on_actionHorizon_Settings_triggered()));
+    connect(ui.actionSmoke_Recognition_Settings,SIGNAL(triggerd()),this, SLOT(on_actionSmoke_Recognition_Settings_triggered()));
 
     // Help Actions
     connect(ui.actionOnline_Documentation, SIGNAL(triggered()), this, SLOT(showHelp()));
@@ -2564,5 +2566,15 @@ void MainWindow::on_actionHorizon_Settings_triggered(){
 
 void MainWindow::on_actionRecognize_Smoke_triggered()
 {
+
+}
+
+void MainWindow::on_actionSmoke_Recognition_Settings_triggered()
+{
+    FireSmokeReco* smoke=new FireSmokeReco(this);
+    smoke->exec();
+    smoke->hide();
+    delete smoke;
+    smoke=NULL;
 
 }

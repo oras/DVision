@@ -498,6 +498,8 @@ private slots:
 
     void on_actionRecognize_Smoke_triggered();
 
+    void on_actionSmoke_Recognition_Settings_triggered();
+
 private:
     bool m_heartbeatEnabled;
     QList<QObject*> commsWidgetList;

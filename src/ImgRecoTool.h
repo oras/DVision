@@ -65,7 +65,7 @@ class ImgRecoTool{
 
         static void drawSaliencyDatas(Node *squares, Mat &src);
 
-        Mat CannyThreshold(int,void*,Mat &src);
+        static void CannyThreshold(int lowThreshold,Mat &src);
 
         static void transferToBinaryImage(int val, Mat &src);
 
@@ -74,6 +74,8 @@ class ImgRecoTool{
         static Mat QImageToCvMat( const QImage &inImage, bool inCloneImageData = true );
 
         static void markRGBflameAreas(Mat &src, Node *areas, int horizon);
+
+        static void contrast(Mat &src, int val);
     private:
         static int **pointInSquare(int x,int y, Node *squares);
 };
