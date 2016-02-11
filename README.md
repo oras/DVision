@@ -9,6 +9,10 @@ look for the orginal APMplanner installation process on their wiki page:
 
 https://github.com/diydrones/apm_planner/blob/master/README.md
 
+# QT Installation Process (Linux):
+
+https://wiki.qt.io/Install_Qt_5_on_Ubuntu
+
 # Opencv Installation Process (Linux):
 
 http://docs.opencv.org/2.4/doc/tutorials/introduction/linux_install/linux_install.html
