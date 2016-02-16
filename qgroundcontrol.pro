@@ -450,7 +450,13 @@ FORMS += \
     src/ui/configuration/CompassMotorCalibrationDialog.ui \
     src/ui/MissionElevationDisplay.ui \
     src/ui/uas/PreFlightCalibrationDialog.ui \
-    src/ui/configuration/RadioFlashWizard.ui
+    src/ui/configuration/RadioFlashWizard.ui \
+    src/ui/FireFlameReco.ui \
+    src/ui/FireHeatReco.ui \
+    src/ui/FireSmokeReco.ui \
+    src/ui/HorizonSettings.ui \
+    src/ui/VideoCapt.ui \
+    src/ui/DroneshareDialog.ui
 
 HEADERS += \
     src/MG.h \
@@ -674,7 +680,19 @@ HEADERS += \
     src/comm/LinkManagerFactory.h \
     src/ui/VibrationMonitor.h \
     src/ui/EKFMonitor.h \
-    src/Settings.h
+    src/Settings.h \
+    src/ui/FireFlameReco.h \
+    src/ui/FireHeatReco.h \
+    src/ui/FireSmokeReco.h \
+    src/ui/HorizonSettings.h \
+    src/ui/VideoCapt.h \
+    src/Event.h \
+    src/EventFactory.h \
+    src/EventsDetection.h \
+    src/Horizon.h \
+    src/ImgRecoTool.h \
+    src/Position.h \
+    src/ui/DroneshareDialog.h
 
 SOURCES += src/main.cc \
     src/QGCCore.cc \
@@ -891,7 +909,18 @@ SOURCES += src/main.cc \
     src/comm/LinkManagerFactory.cpp \
     src/ui/VibrationMonitor.cpp \
     src/ui/EKFMonitor.cpp \
-    src/Settings.cpp
+    src/Settings.cpp \
+    src/ui/FireFlameReco.cc \
+    src/ui/FireHeatReco.cpp \
+    src/ui/FireSmokeReco.cc \
+    src/ui/HorizonSettings.cc \
+    src/ui/VideoCapt.cc \
+    src/Event.cpp \
+    src/Horizon.cpp \
+    src/EventsDetection.cpp \
+    src/ImgRecoTool.cpp \
+    src/Position.cpp \
+    src/ui/DroneshareDialog.cc
 
 MacBuild | WindowsBuild : contains(GOOGLEEARTH, enable) { #fix this to make sense ;)
     message(Including support for Google Earth)
@@ -960,3 +989,16 @@ DISTFILES += \
     qml/components/BarGauge.qml
 
 
+INCLUDEPATH += /usr/local/include/opencv
+
+LIBS += -L/usr/local/lib -lopencv_core -lopencv_imgproc -lopencv_imgcodecs -lopencv_highgui
+
+
+QT += core gui multimedia
+
+QT += multimediawidgets
+
+SUBDIRS += \
+    qupgrade.pro \
+    qgcvideo.pro \
+    qgcunittest.pro

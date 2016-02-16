@@ -51,7 +51,7 @@
      <x>0</x>
      <y>0</y>
      <width>1080</width>
-     <height>22</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuMGround">
@@ -136,10 +136,34 @@
     <addaction name="actionFullscreen"/>
     <addaction name="actionNormal"/>
    </widget>
+   <widget class="QMenu" name="menuEvents_Detection">
+    <property name="title">
+     <string>Events Detection</string>
+    </property>
+    <widget class="QMenu" name="menuFire">
+     <property name="title">
+      <string>Fire</string>
+     </property>
+     <addaction name="separator"/>
+     <addaction name="actionFlame_Recognition"/>
+     <addaction name="actionSmoke_Recognition_Settings"/>
+     <addaction name="actionHeat_Recognition_Settings"/>
+     <addaction name="separator"/>
+     <addaction name="actionFlame"/>
+     <addaction name="actionRecognize_Smoke"/>
+     <addaction name="actionRecognize_Heat"/>
+    </widget>
+    <addaction name="menuFire"/>
+    <addaction name="separator"/>
+    <addaction name="actionHorizon_Settings"/>
+    <addaction name="actionStart_Detection"/>
+    <addaction name="actionLog"/>
+   </widget>
    <addaction name="menuMGround"/>
    <addaction name="menuNetwork"/>
    <addaction name="menuPerspectives"/>
    <addaction name="menuTools"/>
+   <addaction name="menuEvents_Detection"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
@@ -602,6 +626,60 @@
   <action name="actionDonate">
    <property name="text">
     <string>Donate</string>
+   </property>
+  </action>
+  <action name="actionFlame_Recognition">
+   <property name="text">
+    <string>Flame Recognition Settings</string>
+   </property>
+  </action>
+  <action name="actionFlame">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Recognize Flame</string>
+   </property>
+  </action>
+  <action name="actionStart_Detection">
+   <property name="text">
+    <string>Start Detection</string>
+   </property>
+  </action>
+  <action name="actionRecognize_Smoke">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Recognize Smoke</string>
+   </property>
+  </action>
+  <action name="actionRecognize_Heat">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Recognize Heat</string>
+   </property>
+  </action>
+  <action name="actionSmoke_Recognition_Settings">
+   <property name="text">
+    <string>Smoke Recognition Settings</string>
+   </property>
+  </action>
+  <action name="actionHeat_Recognition_Settings">
+   <property name="text">
+    <string>Heat Recognition Settings</string>
+   </property>
+  </action>
+  <action name="actionHorizon_Settings">
+   <property name="text">
+    <string>Horizon Settings</string>
+   </property>
+  </action>
+  <action name="actionLog">
+   <property name="text">
+    <string>Log</string>
    </property>
   </action>
  </widget>
