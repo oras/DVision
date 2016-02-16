@@ -1,5 +1,5 @@
-APM Planner 2.0
-===============
+APM Planner 2.0 Events Detection Version
+========================================
 
 **Support:**
 [ardupilot.com Support Forum for APM Planner 2.0](http://ardupilot.com/forum/viewtopic.php?f=82)
