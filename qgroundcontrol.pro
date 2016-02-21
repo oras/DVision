@@ -692,7 +692,8 @@ HEADERS += \
     src/Horizon.h \
     src/ImgRecoTool.h \
     src/Position.h \
-    src/ui/DroneshareDialog.h
+    src/ui/DroneshareDialog.h \
+    src/Player.h
 
 SOURCES += src/main.cc \
     src/QGCCore.cc \
@@ -920,7 +921,8 @@ SOURCES += src/main.cc \
     src/EventsDetection.cpp \
     src/ImgRecoTool.cpp \
     src/Position.cpp \
-    src/ui/DroneshareDialog.cc
+    src/ui/DroneshareDialog.cc \
+    src/Player.cpp
 
 MacBuild | WindowsBuild : contains(GOOGLEEARTH, enable) { #fix this to make sense ;)
     message(Including support for Google Earth)
@@ -991,7 +993,7 @@ DISTFILES += \
 
 INCLUDEPATH += /usr/local/include/opencv
 
-LIBS += -L/usr/local/lib -lopencv_core -lopencv_imgproc -lopencv_imgcodecs -lopencv_highgui
+LIBS += -L/usr/local/lib -lopencv_core -lopencv_imgproc -lopencv_imgcodecs -lopencv_highgui -lopencv_videoio
 
 
 QT += core gui multimedia

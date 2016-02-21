@@ -7,6 +7,7 @@
 #include <qgraphicsscene.h>
 #include <QMovie>
 #include <QtGui/QMovie>
+#include <Player.h>
 
 
 namespace Ui {
@@ -15,7 +16,10 @@ class VideoCapt;
 
 class VideoCapt : public QDialog
 {
+private:
+    Ui::VideoCapt *ui;
     QMediaPlayer player;
+    Player *MyPlayer;
     QGraphicsVideoItem *item;
     QGraphicsScene *scene;
     Q_OBJECT
@@ -27,8 +31,8 @@ public:
 private slots:
     void on_buttonBox_accepted();
 
-private:
-    Ui::VideoCapt *ui;
+    //Display video frame in player UI
+    void updatePlayerUI(QImage img);
 };
 
 #endif // VIDEOCAPTURE_H
