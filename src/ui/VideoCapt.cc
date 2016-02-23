@@ -1,3 +1,6 @@
+/*This video capture tool was written by Asnin Or 2016 all rights!
+ */
+
 #include "VideoCapt.h"
 #include "ui_VideoCapt.h"
 
