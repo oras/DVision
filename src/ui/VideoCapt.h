@@ -8,6 +8,11 @@
 #include <QMovie>
 #include <QtGui/QMovie>
 #include <Player.h>
+#include <ImgRecoTool.h>
+#include <qgraphicsscene.h>
+
+using namespace std;
+using namespace irt;
 
 
 namespace Ui {
@@ -33,6 +38,7 @@ private slots:
 
     //Display video frame in player UI
     void updatePlayerUI(QImage img);
+    void on_pushButton_clicked();
 };
 
 #endif // VIDEOCAPTURE_H

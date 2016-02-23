@@ -369,7 +369,7 @@ namespace irt{
      return QImage();
     }
 
-    Mat QImageToCvMat( const QImage &inImage, bool inCloneImageData = true )
+    Mat ImgRecoTool::QImageToCvMat( const QImage &inImage, bool inCloneImageData)
        {
           switch ( inImage.format() )
           {
