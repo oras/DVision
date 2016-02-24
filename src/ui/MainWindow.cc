@@ -2578,3 +2578,11 @@ void MainWindow::on_actionSmoke_Recognition_Settings_triggered()
     smoke=NULL;
 
 }
+
+void MainWindow::on_actionDetection_HUD_triggered(){
+    DHUD* hud=new DHUD(simulationLink,this);
+    hud->exec();
+    hud->hide();
+    delete hud;
+    hud=NULL;
+}

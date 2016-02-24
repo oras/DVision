@@ -1,22 +1,25 @@
-#ifndef HUD_H
-#define HUD_H
+#ifndef DHUD_H
+#define DHUD_H
 
-#include <QWidget>
+#include <QDialog>
+#include <MAVLinkSimulationLink.h>
+#include <QPointer>
 
 namespace Ui {
-class HUD;
+class DHUD;
 }
 
-class HUD : public QWidget
+class DHUD : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit HUD(QWidget *parent = 0);
-    ~HUD();
+    explicit DHUD(QPointer<MAVLinkSimulationLink> mavlink,QWidget *parent = 0);
+    ~DHUD();
 
 private:
-    Ui::HUD *ui;
+    void establishMAV();
+    Ui::DHUD *ui;
 };
 
-#endif // HUD_H
+#endif // DHUD_H

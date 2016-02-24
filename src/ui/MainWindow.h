@@ -57,7 +57,7 @@ This file is part of the QGROUNDCONTROL project
 //#include "MAVLinkProtocol.h"
 #include "MAVLinkSimulationLink.h"
 #include "ObjectDetectionView.h"
-#include "HUD.h"
+#include "DHUD.h"
 #include "submainwindow.h"
 #include "JoystickWidget.h"
 #include "input/JoystickInput.h"
@@ -499,6 +499,8 @@ private slots:
     void on_actionRecognize_Smoke_triggered();
 
     void on_actionSmoke_Recognition_Settings_triggered();
+
+    void on_actionDetection_HUD_triggered();
 
 private:
     bool m_heartbeatEnabled;

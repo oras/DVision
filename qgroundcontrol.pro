@@ -456,7 +456,8 @@ FORMS += \
     src/ui/FireSmokeReco.ui \
     src/ui/HorizonSettings.ui \
     src/ui/VideoCapt.ui \
-    src/ui/DroneshareDialog.ui
+    src/ui/DroneshareDialog.ui \
+    src/ui/DHUD.ui
 
 HEADERS += \
     src/MG.h \
@@ -478,7 +479,6 @@ HEADERS += \
     src/ui/uas/UASControlWidget.h \
     src/ui/uas/UASListWidget.h \
     src/ui/uas/UASInfoWidget.h \
-    src/ui/HUD.h \
     src/configuration.h \
     src/ui/uas/UASView.h \
     src/comm/MAVLinkSimulationLink.h \
@@ -693,7 +693,9 @@ HEADERS += \
     src/ImgRecoTool.h \
     src/Position.h \
     src/ui/DroneshareDialog.h \
-    src/Player.h
+    src/Player.h \
+    src/ui/DHUD.h \
+    src/ui/HUD.h
 
 SOURCES += src/main.cc \
     src/QGCCore.cc \
@@ -922,7 +924,8 @@ SOURCES += src/main.cc \
     src/ImgRecoTool.cpp \
     src/Position.cpp \
     src/ui/DroneshareDialog.cc \
-    src/Player.cpp
+    src/Player.cpp \
+    src/ui/DHUD.cc
 
 MacBuild | WindowsBuild : contains(GOOGLEEARTH, enable) { #fix this to make sense ;)
     message(Including support for Google Earth)

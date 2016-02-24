@@ -29,7 +29,7 @@ VideoCapt::VideoCapt(QWidget *parent) :
                               this, SLOT(updatePlayerUI(QImage)));
     connect(ui->capButton,SIGNAL(clicked(bool)),this,SLOT(on_pushButton_clicked()));
 
-    QString filename="/home/or/Videos/SampleVideo_720x480_1mb.mp4";
+    QString filename="/home/or/Videos/Drone_fire_demo.mp4";
 
     if (!filename.isEmpty()){
         if (!MyPlayer->loadVideo(filename.toStdString()))

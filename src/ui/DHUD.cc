@@ -1,14 +1,24 @@
-#include "HUD.h"
-#include "ui_HUD.h"
+#include "DHUD.h"
+#include "ui_DHUD.h"
+#include "configuration.h"
+#include "mavlink.h"
 
-HUD::HUD(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::HUD)
+DHUD::DHUD(QPointer<MAVLinkSimulationLink> mavlink,QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::DHUD)
 {
     ui->setupUi(this);
+    ui->label->setStyleSheet("qproperty-alignment: 'AlignCenter';font-size: 40px;");
+
+    mavlink->messageReceived();
 }
 
-HUD::~HUD()
-{
+void DHUD::establishMAV(){
+
+
+
+}
+
+DHUD::~DHUD(){
     delete ui;
 }

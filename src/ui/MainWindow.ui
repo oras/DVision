@@ -157,6 +157,7 @@
     <addaction name="separator"/>
     <addaction name="actionHorizon_Settings"/>
     <addaction name="actionStart_Detection"/>
+    <addaction name="actionDetection_HUD"/>
     <addaction name="actionLog"/>
    </widget>
    <addaction name="menuMGround"/>
@@ -680,6 +681,14 @@
   <action name="actionLog">
    <property name="text">
     <string>Log</string>
+   </property>
+  </action>
+  <action name="actionDetection_HUD">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show Detection HUD</string>
    </property>
   </action>
  </widget>
