@@ -457,7 +457,8 @@ FORMS += \
     src/ui/HorizonSettings.ui \
     src/ui/VideoCapt.ui \
     src/ui/DroneshareDialog.ui \
-    src/ui/DHUD.ui
+    src/ui/DHUD.ui \
+    src/ui/Analyze3d.ui
 
 HEADERS += \
     src/MG.h \
@@ -585,7 +586,6 @@ HEADERS += \
 #    src/ui/QGCHilXPlaneConfiguration.h \
     src/ui/designer/QGCComboBox.h \
     src/ui/designer/QGCTextLabel.h \
-    src/ui/submainwindow.h \
     src/ui/dockwidgettitlebareventfilter.h \
     src/ui/uas/UASQuickView.h \
     src/ui/uas/UASQuickViewItem.h \
@@ -695,7 +695,11 @@ HEADERS += \
     src/ui/DroneshareDialog.h \
     src/Player.h \
     src/ui/DHUD.h \
-    src/ui/HUD.h
+    src/ui/HUD.h \
+    src/ui/Analyze3D.h \
+    src/ui/MyGLWidget.h \
+    src/ui/submainwindow.h \
+    src/VStreamSimulator.h
 
 SOURCES += src/main.cc \
     src/QGCCore.cc \
@@ -817,7 +821,6 @@ SOURCES += src/main.cc \
 #    src/ui/QGCHilXPlaneConfiguration.cc \
     src/ui/designer/QGCComboBox.cc \
     src/ui/designer/QGCTextLabel.cc \
-    src/ui/submainwindow.cpp \
     src/ui/dockwidgettitlebareventfilter.cpp \
     src/ui/uas/UASQuickViewItem.cc \
     src/ui/uas/UASQuickView.cc \
@@ -925,7 +928,11 @@ SOURCES += src/main.cc \
     src/Position.cpp \
     src/ui/DroneshareDialog.cc \
     src/Player.cpp \
-    src/ui/DHUD.cc
+    src/ui/DHUD.cc \
+    src/VStreamSimulator.cpp \
+    src/ui/Analyze3D.cpp \
+    src/ui/MyGLWidget.cpp \
+    src/ui/submainwindow.cpp
 
 MacBuild | WindowsBuild : contains(GOOGLEEARTH, enable) { #fix this to make sense ;)
     message(Including support for Google Earth)

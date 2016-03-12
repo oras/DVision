@@ -2581,8 +2581,7 @@ void MainWindow::on_actionSmoke_Recognition_Settings_triggered()
 
 void MainWindow::on_actionDetection_HUD_triggered(){
     DHUD* hud=new DHUD(simulationLink,this);
-    hud->exec();
-    hud->hide();
-    delete hud;
-    hud=NULL;
+    hud->resize(250, 150);
+    hud->setWindowTitle("Simple example");
+    hud->show();
 }
