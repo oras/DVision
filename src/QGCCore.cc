@@ -35,6 +35,7 @@ This file is part of the QGROUNDCONTROL project
 #include "QGC.h"
 #include "MainWindow.h"
 #include "GAudioOutput.h"
+#include "VStreamSimulator.h"
 
 #ifdef OPAL_RT
 #include "OpalLink.h"
@@ -263,6 +264,9 @@ void QGCCore::startUASManager()
             //printf(QString("Loaded plugin from " + fileName + "\n").toStdString().c_str());
         }
     }
+
+    QLOG_INFO() << "Start Video Stream Simulator";
+    VStreamSimulator::instance();
 }
 
 

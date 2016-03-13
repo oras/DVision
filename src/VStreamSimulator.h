@@ -15,13 +15,14 @@
 #include <ImgRecoTool.h>
 #include <qgraphicsscene.h>
 #include <UASInterface.h>
+#include <LinkInterface.h>
 
 using namespace cv;
 
 class VStreamSimulator : QThread{
     Q_OBJECT
 private:
-    bool connect;
+    bool con;
     VideoCapture capture;
     QMutex mutex;
     QWaitCondition condition;
@@ -37,7 +38,7 @@ private:
     /** @brief Set the video stream into disconnected mode */
     void heartbeatTimeout(bool timeout, unsigned int ms);
     /** @brief The stram is connected **/
-    void connected();
+    //void connected();
  signals:
     // Signal to output frame to be displayed
      void processedImage(const QImage &image);
@@ -46,6 +47,8 @@ private:
     void streamVideo();
     bool openVideoStream(String fileName);
     void msleep(int ms);
+    LinkInterface* link;
+    void run();
 };
 
 #endif // VSTREAMSIMULATOR_H

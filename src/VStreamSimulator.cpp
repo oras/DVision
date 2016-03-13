@@ -2,6 +2,7 @@
 #include <QtGlobal>
 #include <QtDebug>
 #include "VStreamSimulator.h"
+#include <UASManager.h>
 
 
 VStreamSimulator* VStreamSimulator::instance(){
@@ -20,16 +21,17 @@ VStreamSimulator* VStreamSimulator::instance(){
 VStreamSimulator::VStreamSimulator(QObject *parent)
     :QThread(parent)
 {
-    this->connect=true;
+    con=false;
+    start(LowPriority);
 }
 
 void VStreamSimulator::streamVideo()
 {
     int delay = (1000/frameRate);
-    while(this->connect){
+    while(this->con){
         if (!capture.read(frame))
         {
-            this->connect = true;
+            this->con = true;
         }
         if (frame.channels()== 3){
             cv::cvtColor(frame, RGBframe, CV_BGR2RGB);
@@ -44,6 +46,8 @@ void VStreamSimulator::streamVideo()
         emit processedImage(img);
         this->msleep(delay);
     }
+
+
 }
 
 bool VStreamSimulator::openVideoStream(String filename) {
@@ -59,15 +63,22 @@ bool VStreamSimulator::openVideoStream(String filename) {
 
 VStreamSimulator::~VStreamSimulator(){
     mutex.lock();
-    connect = false;
+    con = false;
     capture.release();
     condition.wakeOne();
     mutex.unlock();
+    if(link!=NULL){
+        delete link;
+        link=NULL;
+    }
     wait();
 }
 
 void VStreamSimulator::heartbeatTimeout(bool timeout, unsigned int ms){
-    this->connect=false;
+    this->con=false;
+    delete link;
+    link=NULL;
+
 }
 
 void VStreamSimulator::msleep(int ms){
@@ -75,6 +86,42 @@ void VStreamSimulator::msleep(int ms){
     nanosleep(&ts, NULL);
 }
 
-void VStreamSimulator::connected(){
-    this->connect=true;
+void VStreamSimulator::run(){
+    while(1){
+        String filename="/home/or/Videos/Drone_fire_demo.mp4";
+
+        QList<LinkInterface*> *linkList;
+
+        // Get a list of all existing UAS
+        UASInterface* uasMain;
+
+        link=NULL;
+
+        while(link==NULL){
+            foreach (UASInterface* uas, UASManager::instance()->getUASList()) {
+                 linkList=uas->getLinks();
+
+                 for(int i=0;linkList->at(i)!=NULL;i++){
+                    if(linkList->at(i)->isConnected()){
+                        link=linkList->at(i);
+                        uasMain=uas;
+                        break;
+                    }
+                 }
+
+                 if(link!=NULL)
+                     break;
+            }
+
+            sleep(1);
+        }
+
+        //connect(link,SIGNAL(connected()),this,SLOT(connected()));
+        connect(uasMain, SIGNAL(heartbeatTimeout(bool, unsigned int)), this, SLOT(heartbeatTimeout(bool, unsigned int)));
+
+        this->con=true;
+
+        openVideoStream(filename);
+        streamVideo();
+    }
 }
