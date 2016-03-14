@@ -2580,8 +2580,9 @@ void MainWindow::on_actionSmoke_Recognition_Settings_triggered()
 }
 
 void MainWindow::on_actionDetection_HUD_triggered(){
-    DHUD* hud=new DHUD(simulationLink,this);
-    hud->resize(250, 150);
-    hud->setWindowTitle("Simple example");
-    hud->show();
+    DHUD* hud=new DHUD(this);
+    hud->exec();
+    hud->hide();
+    delete hud;
+    hud=NULL;
 }

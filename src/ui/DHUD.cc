@@ -1,74 +1,38 @@
 #include "DHUD.h"
 #include "ui_DHUD.h"
 #include "configuration.h"
-#include <mavlink.h>
-#include <UASManager.h>
-#include <LinkManager.h>
+#include "VStreamSimulator.h"
 
 
-DHUD::DHUD(QPointer<MAVLinkSimulationLink> mavlink,QWidget *parent) :
-    QWidget(parent),
+DHUD::DHUD(QWidget *parent) :
+    QDialog(parent),
     ui(new Ui::DHUD)
 {
     ui->setupUi(this);
     ui->label->setStyleSheet("qproperty-alignment: 'AlignCenter';font-size: 40px;");
-    QList<LinkInterface*> *linkList;
+    this->scene=new QGraphicsScene();
+    ui->graphicsView->setScene(this->scene);
+    ui->graphicsView->setHorizontalScrollBarPolicy ( Qt::ScrollBarAlwaysOff );
+    ui->graphicsView->setVerticalScrollBarPolicy ( Qt::ScrollBarAlwaysOff );
+    ui->graphicsView->show();
 
+    connect(VStreamSimulator::instance(),SIGNAL(streamImage(const QImage&)), this, SLOT(streamImage(const QImage&)));
+}
 
-    // Get a list of all existing UAS
-    UASInterface* uasMain;
+void DHUD::streamImage(const QImage &image)
+{
+    ui->label->hide();
 
-    foreach (UASInterface* uas, UASManager::instance()->getUASList()) {
-         linkList=uas->getLinks();
+    if (!image.isNull())
+    {
+        // Refresh scene & update next video frame.
+        scene->clear();
+        scene->addPixmap(QPixmap::fromImage(image).scaled(ui->graphicsView->size(),
+                                                          Qt::KeepAspectRatio, Qt::FastTransformation));
 
-
-         for(int i=0;linkList->at(i)!=NULL;i++){
-            if(linkList->at(i)->isConnected()){
-                link=linkList->at(i);
-                uasMain=uas;
-                break;
-            }
-
-         }
-
-         if(link!=NULL)
-             break;
     }
-
-
-    connect(link,SIGNAL(connected()),this,SLOT(connectedLink()));
-    connect(uasMain, SIGNAL(heartbeatTimeout(bool, unsigned int)), this, SLOT(heartbeatTimeout(bool, unsigned int)));
-
-
-
-
-
-}
-
-void DHUD::connectedLink(){
-    ui->label->setText("Connected!");
-}
-
-void DHUD::heartbeatTimeout(bool timeout, unsigned int ms){
-    ui->label->setText("No Signal!");
-}
-
-void DHUD::showCriticalMessage(const QString& title, const QString& message){
-//    QMessageBox msgBox(this);
-    //QMessageBox::information(this,title,message);
-    ui->label->setText(title+message);
-//    msgBox.setIcon(QMessageBox::Critical);
-//    msgBox.setText(title);
-//    msgBox.setInformativeText(message);
-//    msgBox.setStandardButtons(QMessageBox::Ok);
-//    msgBox.setDefaultButton(QMessageBox::Ok);
-//    msgBox.show();
-}
-
-void DHUD::establishMAV(){
-
-
-
+    else
+        ui->label->show();
 }
 
 DHUD::~DHUD(){

@@ -11,15 +11,15 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>Detection HUD View</string>
   </property>
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>66</x>
-     <y>30</y>
-     <width>551</width>
-     <height>291</height>
+     <x>6</x>
+     <y>10</y>
+     <width>661</width>
+     <height>381</height>
     </rect>
    </property>
    <property name="text">
@@ -29,6 +29,18 @@
     <enum>Qt::AutoText</enum>
    </property>
   </widget>
+  <widget class="QGraphicsView" name="graphicsView">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>651</width>
+     <height>381</height>
+    </rect>
+   </property>
+  </widget>
+  <zorder>graphicsView</zorder>
+  <zorder>label</zorder>
  </widget>
  <resources/>
  <connections/>

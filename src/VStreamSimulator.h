@@ -5,7 +5,7 @@
 #ifndef VSTREAMSIMULATOR_H
 #define VSTREAMSIMULATOR_H
 
-#include <QDialog>
+#include <QObject>
 #include <QMediaPlayer>
 #include <QGraphicsVideoItem>
 #include <qgraphicsscene.h>
@@ -19,7 +19,7 @@
 
 using namespace cv;
 
-class VStreamSimulator : QThread{
+class VStreamSimulator : public QThread{
     Q_OBJECT
 private:
     bool con;
@@ -30,6 +30,8 @@ private:
     int frameRate;
     Mat RGBframe;
     QImage img;
+    UASInterface* uasMain;
+    bool go;
 
  public:
     static VStreamSimulator* instance();
@@ -37,11 +39,11 @@ private:
  public slots:
     /** @brief Set the video stream into disconnected mode */
     void heartbeatTimeout(bool timeout, unsigned int ms);
-    /** @brief The stram is connected **/
-    //void connected();
+    /** @brief A new system was created */
+    void UASCreated(UASInterface* UAS);
  signals:
     // Signal to output frame to be displayed
-     void processedImage(const QImage &image);
+     void streamImage(const QImage &image);
  protected:
     VStreamSimulator(QObject *parent=0);
     void streamVideo();

@@ -3,6 +3,7 @@
 #include <QtDebug>
 #include "VStreamSimulator.h"
 #include <UASManager.h>
+#include <LinkManager.h>
 
 
 VStreamSimulator* VStreamSimulator::instance(){
@@ -21,7 +22,12 @@ VStreamSimulator* VStreamSimulator::instance(){
 VStreamSimulator::VStreamSimulator(QObject *parent)
     :QThread(parent)
 {
+    go=true;
     con=false;
+    link=NULL;
+
+    connect(UASManager::instance(),SIGNAL(UASCreated(UASInterface*)),this,SLOT(UASCreated(UASInterface*)));
+
     start(LowPriority);
 }
 
@@ -43,7 +49,7 @@ void VStreamSimulator::streamVideo()
             img = QImage((const unsigned char*)(frame.data),
                                  frame.cols,frame.rows,QImage::Format_Indexed8);
         }
-        emit processedImage(img);
+        emit streamImage(img);
         this->msleep(delay);
     }
 
@@ -64,6 +70,7 @@ bool VStreamSimulator::openVideoStream(String filename) {
 VStreamSimulator::~VStreamSimulator(){
     mutex.lock();
     con = false;
+    go=false;
     capture.release();
     condition.wakeOne();
     mutex.unlock();
@@ -87,41 +94,36 @@ void VStreamSimulator::msleep(int ms){
 }
 
 void VStreamSimulator::run(){
-    while(1){
-        String filename="/home/or/Videos/Drone_fire_demo.mp4";
+     String filename="/home/or/Videos/Drone_fire_demo.mp4";
 
-        QList<LinkInterface*> *linkList;
-
-        // Get a list of all existing UAS
-        UASInterface* uasMain;
-
-        link=NULL;
-
-        while(link==NULL){
-            foreach (UASInterface* uas, UASManager::instance()->getUASList()) {
-                 linkList=uas->getLinks();
-
-                 for(int i=0;linkList->at(i)!=NULL;i++){
-                    if(linkList->at(i)->isConnected()){
-                        link=linkList->at(i);
-                        uasMain=uas;
-                        break;
-                    }
-                 }
-
-                 if(link!=NULL)
-                     break;
-            }
-
-            sleep(1);
+     while(go){
+        if(link!=NULL){
+            connect(uasMain, SIGNAL(heartbeatTimeout(bool, unsigned int)), this, SLOT(heartbeatTimeout(bool, unsigned int)));
+            this->con=true;
+            openVideoStream(filename);
+            streamVideo();
         }
 
-        //connect(link,SIGNAL(connected()),this,SLOT(connected()));
-        connect(uasMain, SIGNAL(heartbeatTimeout(bool, unsigned int)), this, SLOT(heartbeatTimeout(bool, unsigned int)));
+        sleep(1);
+    }
+}
 
-        this->con=true;
+void VStreamSimulator::UASCreated(UASInterface *UAS){
+    QList<LinkInterface*> *linkList;
 
-        openVideoStream(filename);
-        streamVideo();
+    // Get a list of all existing UAS
+    foreach (UASInterface* uas, UASManager::instance()->getUASList()) {
+         linkList=uas->getLinks();
+
+         for(int i=0;linkList->at(i)!=NULL;i++){
+            if(linkList->at(i)->isConnected()){
+                link=linkList->at(i);
+                uasMain=uas;
+                break;
+            }
+         }
+
+         if(link!=NULL)
+             break;
     }
 }
