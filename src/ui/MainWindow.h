@@ -40,7 +40,6 @@ This file is part of the QGROUNDCONTROL project
 #include <QSettings>
 #include <qlist.h>
 #include <QNetworkProxy>
-#include <EventsDetection.h>
 
 #include "ui_MainWindow.h"
 //#include "LinkManager.h"
@@ -368,7 +367,6 @@ protected:
     QPointer<LinkInterface> udpLink;
 
     QSettings settings;
-    EventsDetection detection;
     QFuture<void> trDetect;
     QPointer<QStackedWidget> centerStack;
     QPointer<QActionGroup> centerStackActionGroup;

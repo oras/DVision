@@ -13,25 +13,25 @@
 #ifndef EVENTSDETECTION_H
 #define EVENTSDETECTION_H
 
-#include <stdio.h>
-#include <iostream>
 #include <Event.h>
 #include <Horizon.h>
 #include <string>
 #include <EventFactory.h>
 #include <QThread>
-#include <QtConcurrent/qtconcurrentrun.h>
+#include <QObject>
 
 
 using namespace std;
 
-class EventsDetection{
+class EventsDetection : public QThread{
+    Q_OBJECT
 private:
     Event *head;
     Horizon *horizon;
-    QFuture<void> trDetect;
 public:
-    EventsDetection();
+    static EventsDetection* instance();
+
+    ~EventsDetection();
 
     void registerNewEventToDetect(string name);
 
@@ -51,6 +51,8 @@ private:
     void start();
 
     void stop();
+protected:
+    EventsDetection(QObject *parent=0);
 };
 
 #endif // EVENTSDETECTION_H

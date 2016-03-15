@@ -1,8 +1,30 @@
 #include "EventsDetection.h"
 #include <qmessagebox.h>
 #include <QThread>
+#include <QtGlobal>
+#include <QtDebug>
 
-EventsDetection::EventsDetection(){
+EventsDetection* EventsDetection::instance(){
+    static EventsDetection* _instance=0;
+
+    if(_instance==0){
+        _instance=new EventsDetection();
+
+        // Set the application as parent to ensure that this object
+        // will be destroyed when the main application exits
+        _instance->setParent(qApp);
+    }
+
+    return _instance;
+}
+
+EventsDetection::EventsDetection(QObject *parent)
+    : QThread(parent)
+{
+
+}
+
+EventsDetection::~EventsDetection(){
 
 }
 
@@ -83,5 +105,5 @@ void EventsDetection::startDetection(){
 }
 
 void EventsDetection::start(){
-    QtConcurrent::run(this,&EventsDetection::startDetection);
+   // QtConcurrent::run(this,&EventsDetection::startDetection);
 }
