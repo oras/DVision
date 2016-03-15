@@ -3,6 +3,7 @@
 #include <QThread>
 #include <QtGlobal>
 #include <QtDebug>
+#include <QApplication>
 
 EventsDetection* EventsDetection::instance(){
     static EventsDetection* _instance=0;
@@ -19,13 +20,13 @@ EventsDetection* EventsDetection::instance(){
 }
 
 EventsDetection::EventsDetection(QObject *parent)
-    : QThread(parent)
+    :QThread(parent)
 {
-
+    start(LowPriority);
 }
 
 EventsDetection::~EventsDetection(){
-
+    wait();
 }
 
 void EventsDetection::registerNewEventToDetect(string name){
@@ -106,4 +107,8 @@ void EventsDetection::startDetection(){
 
 void EventsDetection::start(){
    // QtConcurrent::run(this,&EventsDetection::startDetection);
+}
+
+void EventsDetection::run(){
+
 }

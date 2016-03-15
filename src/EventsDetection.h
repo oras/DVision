@@ -53,6 +53,7 @@ private:
     void stop();
 protected:
     EventsDetection(QObject *parent=0);
+    void run();
 };
 
 #endif // EVENTSDETECTION_H
