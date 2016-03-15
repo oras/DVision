@@ -16,6 +16,7 @@
 #include <qgraphicsscene.h>
 #include <UASInterface.h>
 #include <LinkInterface.h>
+#include <LinkManager.h>
 
 using namespace cv;
 
@@ -41,9 +42,13 @@ private:
     void heartbeatTimeout(bool timeout, unsigned int ms);
     /** @brief A new system was created */
     void UASCreated(UASInterface* UAS);
- signals:
+    /** @brief message recived (link is online) */
+    void messageReceived(LinkInterface* link,mavlink_message_t message);
+signals:
     // Signal to output frame to be displayed
      void streamImage(const QImage &image);
+     // Signal video stream has been disconnected
+     void videoStreamDisconnected();
  protected:
     VStreamSimulator(QObject *parent=0);
     void streamVideo();

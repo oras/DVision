@@ -22,6 +22,8 @@ public:
 public slots:
     /** @brief Update image from video stream */
     void streamImage(const QImage &image);
+    /** @brief Video stream has been disconnected */
+    void videoStreamDisconnected();
 private:
     Ui::DHUD *ui;
     QGraphicsScene *scene;

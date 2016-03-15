@@ -27,6 +27,7 @@ VStreamSimulator::VStreamSimulator(QObject *parent)
     link=NULL;
 
     connect(UASManager::instance(),SIGNAL(UASCreated(UASInterface*)),this,SLOT(UASCreated(UASInterface*)));
+    connect(LinkManager::instance(),SIGNAL(messageReceived(LinkInterface*,mavlink_message_t)),this,SLOT(messageReceived(LinkInterface*,mavlink_message_t)));
 
     start(LowPriority);
 }
@@ -53,6 +54,7 @@ void VStreamSimulator::streamVideo()
         this->msleep(delay);
     }
 
+    emit videoStreamDisconnected();
 
 }
 
@@ -82,9 +84,8 @@ VStreamSimulator::~VStreamSimulator(){
 }
 
 void VStreamSimulator::heartbeatTimeout(bool timeout, unsigned int ms){
-    this->con=false;
-    delete link;
-    link=NULL;
+   this->con=false;
+   link=NULL;
 
 }
 
@@ -99,6 +100,7 @@ void VStreamSimulator::run(){
      while(go){
         if(link!=NULL){
             connect(uasMain, SIGNAL(heartbeatTimeout(bool, unsigned int)), this, SLOT(heartbeatTimeout(bool, unsigned int)));
+            connect(UASManager::instance(),SIGNAL(UASCreated(UASInterface*)),this,SLOT(UASCreated(UASInterface*)));
             this->con=true;
             openVideoStream(filename);
             streamVideo();
@@ -125,5 +127,16 @@ void VStreamSimulator::UASCreated(UASInterface *UAS){
 
          if(link!=NULL)
              break;
+    }
+}
+
+void VStreamSimulator::messageReceived(LinkInterface *link, mavlink_message_t message){
+     QList<LinkInterface*> *linkList=uasMain->getLinks();
+
+    for(int i=0;linkList->at(i)!=NULL;i++){
+       if(linkList->at(i)->isConnected()){
+           this->link=linkList->at(i);
+           break;
+       }
     }
 }

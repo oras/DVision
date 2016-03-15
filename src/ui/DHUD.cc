@@ -17,6 +17,7 @@ DHUD::DHUD(QWidget *parent) :
     ui->graphicsView->show();
 
     connect(VStreamSimulator::instance(),SIGNAL(streamImage(const QImage&)), this, SLOT(streamImage(const QImage&)));
+    connect(VStreamSimulator::instance(),SIGNAL(videoStreamDisconnected()), this, SLOT(videoStreamDisconnected()));
 }
 
 void DHUD::streamImage(const QImage &image)
@@ -33,6 +34,11 @@ void DHUD::streamImage(const QImage &image)
     }
     else
         ui->label->show();
+}
+
+void DHUD::videoStreamDisconnected(){
+    scene->clear();
+    ui->label->show();
 }
 
 DHUD::~DHUD(){
