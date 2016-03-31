@@ -174,7 +174,7 @@ void HorizonSettings::on_pushButton_2_clicked()
     this->close();
 }
 
-void HorizonSettings::createHorizon(){
+void HorizonSettings::createHorizon(hNode *root, int &rootSize){
     const int IMG_BORDER_POINTS=2;
     const int MAX_RESOLUTION=this->resolution;
     const int IMG_WIDTH_PIX_SIZE=this->defaultImg.cols;
@@ -182,8 +182,8 @@ void HorizonSettings::createHorizon(){
     const int IMG_PART_SIZE=IMG_WIDTH_PIX_SIZE/(MAX_RESOLUTION+1);
     int x=0;
 
-    if(this->hRoot!=NULL)
-        releaseHRoot();
+    if(root!=NULL)
+        releaseHRoot(root);
 
     this->hRootSize=IMG_BORDER_POINTS+MAX_RESOLUTION;
 
@@ -250,11 +250,11 @@ void HorizonSettings::drawHorizon(){
 }
 
 void HorizonSettings::on_horizontalSlider_2_sliderReleased(){
-    createHorizon();
+    createHorizon(this->hRoot,this->hRootSize);
     drawHorizon();
 }
 
-void HorizonSettings::releaseHRoot(){
-   delete[] this->hRoot;
+void HorizonSettings::releaseHRoot(hNode *root){
+   delete[] root;
     //delete hRoot;
 }

@@ -22,7 +22,7 @@ EventsDetection* EventsDetection::instance(){
 EventsDetection::EventsDetection(QObject *parent)
     :QThread(parent)
 {
-    start(LowPriority);
+     start();
 }
 
 EventsDetection::~EventsDetection(){
@@ -110,5 +110,5 @@ void EventsDetection::start(){
 }
 
 void EventsDetection::run(){
-
+    cout<<"Hellow World"<<endl;
 }

@@ -307,7 +307,7 @@ namespace irt{
         src_gray=getImageChannel(src,2);
 
         //Reduce noise with a kernel 3x3
-        blur(src_gray, detected_edges, Size(3,3) );
+        //blur(src_gray, detected_edges, Size(3,3) );
 
         //Canny detector.
         Canny(detected_edges,detected_edges,lowThreshold,lowThreshold*ratio,kernel_size);
@@ -462,6 +462,82 @@ namespace irt{
                             saturate_cast<uchar>(FACTOR*(src.at<Vec3b>(i,j)[c]-C3)+C3);
                 }
 
+    }
+
+    void ImgRecoTool::drawHorizon(const unsigned int &resolution, const hNode *hRoot,Mat &src){
+        const int IMG_BORDER_POINTS=2;
+        const int NUM_OF_X_POINTS=resolution+IMG_BORDER_POINTS;
+        int y,y0,y1,x0,x1=0;
+
+        //Horizon mark color:
+        const int R=112, G=238, B=28;
+
+        /*They are two diffrent methods to draw the horizon:
+         * 1. Linear interpolation.
+         * 2. Polynomial interpolation (Didn't realize).
+        */
+
+        //1
+
+        for(int i=0;i<NUM_OF_X_POINTS-1;i++){
+            for(int x=hRoot[i].x;x<hRoot[i+1].x;x++){
+                y0=hRoot[i].y;
+                x0=hRoot[i].x;
+                y1=hRoot[i+1].y;
+                x1=hRoot[i+1].x;
+
+                y=y0+(y1-y0)*(x-x0)/(x1-x0);
+
+                src.at<Vec3b>(y,x)[0]=R;
+                src.at<Vec3b>(y+1,x)[0]=R;
+                src.at<Vec3b>(y,x)[1]=G;
+                src.at<Vec3b>(y+1,x)[1]=G;
+                src.at<Vec3b>(y,x)[2]=B;
+                src.at<Vec3b>(y+1,x)[1]=G;
+
+            }
+        }
+
+
+        //2
+    }
+
+    hNode* ImgRecoTool::createHorizon(const unsigned int &resolution,Mat &img,int binaryThresh){
+        const int IMG_BORDER_POINTS=2;
+        const int MAX_RESOLUTION=resolution;
+        const int IMG_WIDTH_PIX_SIZE=img.cols;
+        const int IMG_HEIGHT_PIX_SIZE=img.rows;
+        const int IMG_PART_SIZE=IMG_WIDTH_PIX_SIZE/(MAX_RESOLUTION+1);
+        int x=0;
+        Mat binaryImg;
+
+        hNode *root=new hNode[MAX_RESOLUTION+IMG_BORDER_POINTS];
+
+        threshold(getImageChannel(img,2),binaryImg,binaryThresh,255,0);
+
+        for(int i=0;i<=MAX_RESOLUTION+1;i++){
+            if(i==MAX_RESOLUTION+1)
+               root[i].x=img.cols-1;
+            else
+               root[i].x=x;
+
+            //Find the Y of point:
+            for(int y=0;y<IMG_HEIGHT_PIX_SIZE;y++){
+                 if(binaryImg.at<uchar>(y,x)==0){
+                     root[i].y=y;
+                     break;
+                 }
+            }
+
+            x+=IMG_PART_SIZE;
+        }
+
+        return root;
+    }
+
+    void ImgRecoTool::releaseHRoot(hNode *root){
+       delete[] root;
+       root=NULL;
     }
 }
 

@@ -40,7 +40,7 @@ struct Rectangle
 public:
     static Rectangle Empty;
     static Rectangle FromLTRB(int left, int top, int right, int bottom);
-    Rectangle(){x=0; y=0; width=0; height=0; };
+    Rectangle(){x=0; y=0; width=0; height=0; }
     Rectangle(int x, int y, int width, int height)
     {
         this->x = x;

@@ -69,6 +69,7 @@ This file is part of the QGROUNDCONTROL project
 #include "DroneshareDialog.h"
 #include "HorizonSettings.h"
 #include "FireSmokeReco.h"
+#include "DetectionHUD.h"
 
 // FIXME Move
 #include "PxQuadMAV.h"
@@ -2580,9 +2581,7 @@ void MainWindow::on_actionSmoke_Recognition_Settings_triggered()
 }
 
 void MainWindow::on_actionDetection_HUD_triggered(){
-    DHUD* hud=new DHUD(this);
-    hud->exec();
-    hud->hide();
-    delete hud;
-    hud=NULL;
+    DetectionHUD* hud=new DetectionHUD(this);
+    hud->setWindowFlags( Qt::Window);
+    hud->show();
 }

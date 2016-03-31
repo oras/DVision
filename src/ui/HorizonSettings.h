@@ -17,10 +17,6 @@ namespace Ui {
 class HorizonSettings;
 }
 
-struct hNode{
-    int x,y;
-};
-
 class HorizonSettings : public QDialog
 {
     Q_OBJECT
@@ -51,7 +47,7 @@ public:
 
      string getPath();
 
-     void createHorizon();
+     void createHorizon(hNode *root, int &rootSize);
 
      hNode *getHorizon();
 
@@ -81,7 +77,7 @@ private:
 
     void updateImage(Mat &src);
 
-    void releaseHRoot();
+    void releaseHRoot(hNode *root);
 
     Ui::HorizonSettings *ui;
 };

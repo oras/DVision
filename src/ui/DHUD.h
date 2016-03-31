@@ -2,10 +2,13 @@
 #define DHUD_H
 
 #include <QDialog>
-#include <QObject>
-#include <QPointer>
-#include <QApplication>
-#include <QGraphicsScene>
+#include <string>
+//#include <ImgRecoTool.h>
+//#include <qgraphicsscene.h>
+
+using namespace std;
+//using namespace irt;
+
 
 namespace Ui {
 class DHUD;
@@ -16,7 +19,7 @@ class DHUD : public QDialog
     Q_OBJECT
 
 public:
-    explicit DHUD(QWidget *parent = 0);
+    explicit DHUD(QWidget *parent);
     ~DHUD();
 
 public slots:
@@ -25,8 +28,12 @@ public slots:
     /** @brief Video stream has been disconnected */
     void videoStreamDisconnected();
 private:
-    Ui::DHUD *ui;
-    QGraphicsScene *scene;
+    Ui::DHUD* ui;
+    //QGraphicsScene* scene;
+    //Horizon* horizon;
+    //int binaryImgThreshold;
+    //unsigned int resolution;
+    //hNode *hRoot;
 };
 
 #endif // DHUD_H

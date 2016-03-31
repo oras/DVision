@@ -23,6 +23,9 @@ Event *Event::newEvent(const string &description){
     return NULL;
 }
 
+Event::Event(){
+
+}
 
 void Event::setImage(string path){
     this->img=path;

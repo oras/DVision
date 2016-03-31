@@ -20,9 +20,6 @@
 #include <QThread>
 #include <QObject>
 
-
-using namespace std;
-
 class EventsDetection : public QThread{
     Q_OBJECT
 private:
@@ -30,29 +27,30 @@ private:
     Horizon *horizon;
 public:
     static EventsDetection* instance();
-
     ~EventsDetection();
 
     void registerNewEventToDetect(string name);
 
     void startDetection();
-
+public slots:
+signals:
 private:
-    void logEvent(Event *event);
+    //void logEvent(Event *event);
 
-    int* calculatePrecentOfFireDetect();
+    //int* calculatePrecentOfFireDetect();
 
-    void marhkEventOnGoogleEarth(Event *event);
+    //void markEventOnGoogleEarth(Event *event);
 
     void removeEvent(Event *event);
 
-    void readUAVinfo();
+    //void readUAVinfo();
 
     void start();
 
-    void stop();
-protected:
+    //void stop();
+
     EventsDetection(QObject *parent=0);
+protected:
     void run();
 };
 

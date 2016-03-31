@@ -457,8 +457,9 @@ FORMS += \
     src/ui/HorizonSettings.ui \
     src/ui/VideoCapt.ui \
     src/ui/DroneshareDialog.ui \
+    src/ui/Analyze3d.ui \
     src/ui/DHUD.ui \
-    src/ui/Analyze3d.ui
+    src/ui/DetectionHUD.ui
 
 HEADERS += \
     src/MG.h \
@@ -694,12 +695,14 @@ HEADERS += \
     src/Position.h \
     src/ui/DroneshareDialog.h \
     src/Player.h \
-    src/ui/DHUD.h \
     src/ui/HUD.h \
     src/ui/Analyze3D.h \
     src/ui/MyGLWidget.h \
     src/ui/submainwindow.h \
-    src/VStreamSimulator.h
+    src/VStreamSimulator.h \
+    src/ui/DHUD.h \
+    src/ui/DetectionHUD.h \
+    src/GraphicsCompute.h
 
 SOURCES += src/main.cc \
     src/QGCCore.cc \
@@ -923,16 +926,18 @@ SOURCES += src/main.cc \
     src/ui/VideoCapt.cc \
     src/Event.cpp \
     src/Horizon.cpp \
-    src/EventsDetection.cpp \
     src/ImgRecoTool.cpp \
     src/Position.cpp \
     src/ui/DroneshareDialog.cc \
     src/Player.cpp \
-    src/ui/DHUD.cc \
     src/VStreamSimulator.cpp \
     src/ui/Analyze3D.cpp \
     src/ui/MyGLWidget.cpp \
-    src/ui/submainwindow.cpp
+    src/ui/submainwindow.cpp \
+    src/EventsDetection.cpp \
+    src/ui/DHUD.cpp \
+    src/ui/DetectionHUD.cpp \
+    src/GraphicsCompute.cpp
 
 MacBuild | WindowsBuild : contains(GOOGLEEARTH, enable) { #fix this to make sense ;)
     message(Including support for Google Earth)
@@ -1003,8 +1008,7 @@ DISTFILES += \
 
 INCLUDEPATH += /usr/local/include/opencv
 
-LIBS += -L/usr/local/lib -lopencv_core -lopencv_imgproc -lopencv_imgcodecs -lopencv_highgui -lopencv_videoio
-
+LIBS += -L/usr/local/lib -lopencv_core -lopencv_imgproc -lopencv_imgcodecs -lopencv_highgui -lopencv_videoio -lopencv_shape -lopencv_stitching -lopencv_objdetect -lopencv_superres -lopencv_videostab -lopencv_calib3d -lopencv_features2d -lopencv_video -lopencv_photo -lopencv_ml -lopencv_flann -lopencv_hal
 
 QT += core gui multimedia
 

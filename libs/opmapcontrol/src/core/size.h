@@ -36,8 +36,8 @@ namespace core {
     {
 
         Size();
-        Size(Point pt){width=pt.X(); height=pt.Y();};
-        Size(int Width,int Height){width=Width; height=Height;};
+        Size(Point pt){width=pt.X(); height=pt.Y();}
+        Size(int Width,int Height){width=Width; height=Height;}
         friend uint qHash(Size const& size);
         //  friend bool operator==(Size const& lhs,Size const& rhs);
         Size operator-(const Size &sz1){return Size(width-sz1.width,height-sz1.height);}

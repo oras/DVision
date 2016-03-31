@@ -51,6 +51,11 @@ class Node{
     }
 };
 
+struct hNode{
+    int x,y;
+};
+
+
 namespace irt{
 
 class ImgRecoTool{
@@ -76,8 +81,15 @@ class ImgRecoTool{
         static void markRGBflameAreas(Mat &src, Node *areas, int horizon);
 
         static void contrast(Mat &src, int val);
-    private:
+
+        static void drawHorizon(const unsigned int &resolution, const hNode *hRoot, Mat &src);
+
+        static hNode* createHorizon(const unsigned int &resolution,Mat &img,int binaryThresh);
+
+         static void releaseHRoot(hNode *root);
+private:
         static int **pointInSquare(int x,int y, Node *squares);
+
 };
 }
 

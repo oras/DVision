@@ -36,6 +36,8 @@ private:
 public:
     static Event *newEvent(const string &description);
 
+    Event();
+
     void setImage(string path);
 
     void setVideo(string path);
