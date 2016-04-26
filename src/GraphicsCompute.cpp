@@ -10,21 +10,70 @@ GraphicsCompute::GraphicsCompute(QObject *parent)
 
 
 void GraphicsCompute::run(){
+    mutex.lock();
 
+    Mat matImg;
     // Display detected horizon:
 
-    mutex.lock();
-        Mat matImg=ImgRecoTool::QImageToCvMat(*img);
-        ImgRecoTool::contrast(matImg,100);
-        this->hRoot=ImgRecoTool::createHorizon(50,matImg,170);
 
+
+    switch(2){
+
+    case 1:
+    {
+                matImg=ImgRecoTool::QImageToCvMat(*img);
+                ImgRecoTool::contrast(matImg,100);
+                this->hRoot=ImgRecoTool::createHorizon(50,matImg,170);
+
+                matImg=ImgRecoTool::QImageToCvMat(*img);
+                ImgRecoTool::drawHorizon(50,this->hRoot,matImg);
+                *img=ImgRecoTool::cvMatToQImage(matImg);
+
+                ImgRecoTool::releaseHRoot(hRoot);
+
+                emit imageReady(*img);
+
+        break;
+    }
+    case 2:
+    {
+                matImg=ImgRecoTool::QImageToCvMat(*img);
+                this->root=ImgRecoTool::getSaliencyMap(matImg,1,100);
+                //ImgRecoTool::contrast(matImg,100);
+                this->hRoot=ImgRecoTool::createHorizon(50,matImg,170);
+
+                Horizon* horizon=new Horizon(this->hRoot,50);
+                ImgRecoTool::markCircleOnFlame(matImg,this->root,horizon);
+                *img=ImgRecoTool::cvMatToQImage(matImg);
+
+                ImgRecoTool::releaseHRoot(hRoot);
+                ImgRecoTool::freeNodeLinkedList(root);
+
+                delete horizon;
+
+                emit imageReady(*img);
+
+        break;
+    }
+    case 3:
+    {
         matImg=ImgRecoTool::QImageToCvMat(*img);
-        ImgRecoTool::drawHorizon(50,this->hRoot,matImg);
-        *img=ImgRecoTool::cvMatToQImage(matImg);
+                this->root=ImgRecoTool::getSaliencyMap(matImg,1,100);
+                //ImgRecoTool::contrast(matImg,100);
 
-        ImgRecoTool::releaseHRoot(hRoot);
+                ImgRecoTool::drawSaliencyDatas(this->root,matImg);
+                *img=ImgRecoTool::cvMatToQImage(matImg);
 
-        emit imageReady(*img);
+                ImgRecoTool::freeNodeLinkedList(root);
+
+
+                emit imageReady(*img);
+
+        break;
+    }
+    }
+
+    //Display detected
 
     mutex.unlock();
 

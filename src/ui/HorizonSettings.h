@@ -26,7 +26,7 @@ private:
     int binaryImgThreshold;
     unsigned int resolution;
     Node *root;
-    hNode *hRoot;
+    cv::Point *hRoot;
     int hRootSize;
     QGraphicsScene* scene;
     Mat defaultImg;
@@ -47,9 +47,9 @@ public:
 
      string getPath();
 
-     void createHorizon(hNode *root, int &rootSize);
+     void createHorizon(cv::Point *root, int &rootSize);
 
-     hNode *getHorizon();
+     cv::Point *getHorizon();
 
      void drawHorizon();
 private slots:
@@ -77,7 +77,7 @@ private:
 
     void updateImage(Mat &src);
 
-    void releaseHRoot(hNode *root);
+    void releaseHRoot(cv::Point *root);
 
     Ui::HorizonSettings *ui;
 };

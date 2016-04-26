@@ -47,7 +47,7 @@ void FireSmokeReco::on_buttonBox_accepted()
 }
 
 void FireSmokeReco::loadDiskDefaultImg(){
-    QFile mFile("/home/oras/workspace/apm_planner/Data.txt");
+    QFile mFile("/home/or/workspace/apm_planner/Data.txt");
 
     if(mFile.open(QIODevice::ReadOnly)){
         QTextStream in(&mFile);

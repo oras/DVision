@@ -26,40 +26,72 @@
 #include <unistd.h>
 #include <QImage>
 #include <QPixmap>
+#include <Horizon.h>
 
 using namespace cv;
 using namespace std;
 
-
+const int POINT_SIZE=2;
 
 class Node{
     public:
-    int **data;
-    Node *next;
+    cv::Point* point;
+    Node* next;
 
-    Node(int x[][2], Node * y){
-        data=new int*[2];
+    Node(cv::Point* p, Node * y){
+        point=new cv::Point[POINT_SIZE];
 
         for(int i=0;i<=1;i++){
-            data[i]=new int[2];
-            for(int j=0;j<=1;j++){
-                data[i][j]=x[i][j];
-            }
+            point[i].x=p[i].x;
+            point[i].y=p[i].y;
         }
 
         next = y;
     }
 };
 
-struct hNode{
-    int x,y;
+class Circle{
+public:
+    int radios;
+    cv::Point p;
+    Circle* next;
+
+    Circle(int x, int y, int radios){
+
+    }
+
+private:
+    int getCenter(const int &x1,const int &x2){
+
+        // Check if even
+        int length=abs(x2-x1);
+        if(length%2){
+            return length/2+1;
+        }
+        else
+            return length/2;
+    }
+
+    int getRadios(const int &x1, const int &y1, const int &x2, const int &y2){
+        int lengthX=abs(x2-x1);
+        int lengthY=abs(y2-y1);
+
+        double caliber=double(sqrt(pow(lengthX,2))+double(pow(lengthY,2)));
+
+        int radios=caliber/2;
+
+        return radios;
+    }
 };
+
 
 
 namespace irt{
 
 class ImgRecoTool{
     public:
+
+
        static Mat hsiTransform(Mat &src);
 
         static Mat getRGBHistogram(Mat &src);
@@ -82,13 +114,25 @@ class ImgRecoTool{
 
         static void contrast(Mat &src, int val);
 
-        static void drawHorizon(const unsigned int &resolution, const hNode *hRoot, Mat &src);
+        static void drawHorizon(const unsigned int &resolution, const cv::Point *hRoot, Mat &src);
 
-        static hNode* createHorizon(const unsigned int &resolution,Mat &img,int binaryThresh);
+        static cv::Point* createHorizon(const unsigned int &resolution,Mat &img,int binaryThresh);
 
-         static void releaseHRoot(hNode *root);
+        static void releaseHRoot(cv::Point *root);
+
+       static void markCircleOnFlame(Mat &src,Node* squares, Horizon* horizon);
+
+        static void freeNodeLinkedList(Node *p);
 private:
-        static int **pointInSquare(int x,int y, Node *squares);
+
+
+
+        static cv::Point* pointInSquare(int x,int y, Node *squares);
+
+        static bool pointUnderHorizon(const int &x,const int &y,const cv::Point* h1,const cv::Point* h2);
+
+signals:
+    void imageReady(const QImage &img);
 
 };
 }

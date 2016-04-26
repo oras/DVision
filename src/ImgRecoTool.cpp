@@ -93,14 +93,14 @@ namespace irt{
 
         // Draw for each channel
         for( int i = 1; i < histSize; i++ ){
-              line( histImage, Point( bin_w*(i-1), hist_h - cvRound(b_hist.at<float>(i-1)) ) ,
-                               Point( bin_w*(i), hist_h - cvRound(b_hist.at<float>(i)) ),
+              line( histImage, cv::Point( bin_w*(i-1), hist_h - cvRound(b_hist.at<float>(i-1)) ) ,
+                               cv::Point( bin_w*(i), hist_h - cvRound(b_hist.at<float>(i)) ),
                                Scalar( 255, 0, 0), 2, 8, 0  );
-              line( histImage, Point( bin_w*(i-1), hist_h - cvRound(g_hist.at<float>(i-1)) ) ,
-                               Point( bin_w*(i), hist_h - cvRound(g_hist.at<float>(i)) ),
+              line( histImage, cv::Point( bin_w*(i-1), hist_h - cvRound(g_hist.at<float>(i-1)) ) ,
+                               cv::Point( bin_w*(i), hist_h - cvRound(g_hist.at<float>(i)) ),
                                Scalar( 0, 255, 0), 2, 8, 0  );
-              line( histImage, Point( bin_w*(i-1), hist_h - cvRound(r_hist.at<float>(i-1)) ) ,
-                               Point( bin_w*(i), hist_h - cvRound(r_hist.at<float>(i)) ),
+              line( histImage, cv::Point( bin_w*(i-1), hist_h - cvRound(r_hist.at<float>(i-1)) ) ,
+                               cv::Point( bin_w*(i), hist_h - cvRound(r_hist.at<float>(i)) ),
                                Scalar( 0, 0, 255), 2, 8, 0  );
         }
 
@@ -118,10 +118,10 @@ namespace irt{
 
     Node* ImgRecoTool::getSaliencyMap(Mat &srcImg, int scan, int thresh){
         Node *head=NULL;
-        int **jP;
+        cv::Point *jP;
         Mat binaryImage;
         Mat tempImage=srcImg.clone();
-        int point[2][2]; //4 points of square mark data to analyze.
+        cv::Point point[2]; //4 cv::Points of square mark data to analyze.
         int maxX, maxY=0;
         int i, j=0; //Inner analyzing data image matrix indexes.
         int sum=0;
@@ -135,8 +135,8 @@ namespace irt{
                     if(binaryImage.at<uchar>(r,c)==255){
                         jP=pointInSquare(c,r,head);
                         if(jP==NULL){
-                            point[0][0]=c;
-                            point[0][1]=r;
+                            point[0].x=c;
+                            point[1].y=r;
                             maxX=c;
                             maxY=r;
                             c++;
@@ -175,8 +175,8 @@ namespace irt{
                                 j++;
                             }
 
-                            point[1][0]=maxX;
-                            point[1][1]=maxY;
+                            point[1].x=maxX;
+                            point[1].y=maxY;
 
                             if(head==NULL){
                                 head=new Node(point,NULL);
@@ -192,7 +192,7 @@ namespace irt{
                             }
                         }
                         else{
-                            c=jP[1][0] + 1;
+                            c=jP[1].x + 1;
                         }
                     }
                 }
@@ -205,8 +205,8 @@ namespace irt{
                     if(binaryImage.at<uchar>(r,c)==255){
                         jP=pointInSquare(c,r,head);
                         if(jP==NULL){
-                            point[0][0]=c;
-                            point[0][1]=r;
+                            point[0].x=c;
+                            point[1].y=r;
                             maxX=c;
                             maxY=r;
                             c++;
@@ -232,8 +232,8 @@ namespace irt{
                                 j++;
                             }
 
-                            point[1][0]=maxX;
-                            point[1][1]=maxY;
+                            point[1].x=maxX;
+                            point[1].y=maxY;
 
                             if(head==NULL){
                                 head=new Node(point,NULL);
@@ -250,7 +250,7 @@ namespace irt{
 
                         }
                         else{
-                            c=jP[1][0] + 1;
+                            c=jP[1].x + 1;
                         }
 
                     }
@@ -261,11 +261,12 @@ namespace irt{
         return head;
     }
 
-    int **ImgRecoTool::pointInSquare(int x, int y, Node *squares){
+    Point *ImgRecoTool::pointInSquare(int x, int y, Node *squares){
         for(Node *p=squares;p!=NULL;p=p->next){
-            if(x>=p->data[0][0]&&x<=p->data[1][0]&&y>=p->data[0][1]&&y<=p->data[1][1]){
-                return p->data;
-            }
+            if(p->point!=NULL)
+                if(x>=p->point[0].x&&x<=p->point[1].x&&y>=p->point[0].y&&y<=p->point[1].y){
+                    return p->point;
+                }
         }
 
         return NULL;
@@ -278,23 +279,23 @@ namespace irt{
         for(Node *p=squares;p!=NULL;p=p->next){
 
             //Draw horizontal square lines
-            for(int i=p->data[0][0];i<=p->data[1][0];i++){
-                src.at<Vec3b>(p->data[0][1],i)[0]=R;
-                src.at<Vec3b>(p->data[1][1],i)[0]=R;
-                src.at<Vec3b>(p->data[0][1],i)[1]=G;
-                src.at<Vec3b>(p->data[1][1],i)[1]=G;
-                src.at<Vec3b>(p->data[0][1],i)[2]=B;
-                src.at<Vec3b>(p->data[1][1],i)[2]=B;
+            for(int i=p->point[0].x;i<=p->point[1].x;i++){
+                src.at<Vec3b>(p->point[0].y,i)[0]=R;
+                src.at<Vec3b>(p->point[1].y,i)[0]=R;
+                src.at<Vec3b>(p->point[0].y,i)[1]=G;
+                src.at<Vec3b>(p->point[1].y,i)[1]=G;
+                src.at<Vec3b>(p->point[0].y,i)[2]=B;
+                src.at<Vec3b>(p->point[1].y,i)[2]=B;
             }
 
             //Draw verticals square lines:
-            for(int j=p->data[0][1];j<=p->data[1][1];j++){
-                src.at<Vec3b>(j,p->data[0][0])[0]=R;
-                src.at<Vec3b>(j,p->data[1][0])[0]=R;
-                src.at<Vec3b>(j,p->data[0][0])[1]=G;
-                src.at<Vec3b>(j,p->data[1][0])[1]=G;
-                src.at<Vec3b>(j,p->data[0][0])[2]=B;
-                src.at<Vec3b>(j,p->data[1][0])[2]=B;
+            for(int j=p->point[0].y;j<=p->point[1].y;j++){
+                src.at<Vec3b>(j,p->point[0].x)[0]=R;
+                src.at<Vec3b>(j,p->point[1].x)[0]=R;
+                src.at<Vec3b>(j,p->point[0].x)[1]=G;
+                src.at<Vec3b>(j,p->point[1].x)[1]=G;
+                src.at<Vec3b>(j,p->point[0].x)[2]=B;
+                src.at<Vec3b>(j,p->point[1].x)[2]=B;
             }
         }
     }
@@ -307,7 +308,7 @@ namespace irt{
         src_gray=getImageChannel(src,2);
 
         //Reduce noise with a kernel 3x3
-        //blur(src_gray, detected_edges, Size(3,3) );
+        blur(src_gray, detected_edges, Size(3,3) );
 
         //Canny detector.
         Canny(detected_edges,detected_edges,lowThreshold,lowThreshold*ratio,kernel_size);
@@ -427,8 +428,8 @@ namespace irt{
         horizon=src.rows-horizon-1;
 
         for(Node *p=areas;p!=NULL;p=p->next){
-            for(int i=(int)p->data[0][1];i<=(int)p->data[1][1] && i<src.rows;i++){
-                for(int j=(int)p->data[0][0];j<=(int)p->data[1][0] && j<src.cols;j++){
+            for(int i=(int)p->point[0].y;i<=(int)p->point[1].y && i<src.rows;i++){
+                for(int j=(int)p->point[0].x;j<=(int)p->point[1].x && j<src.cols;j++){
                     b=src.at<Vec3b>(i,j)[0];
                     g=src.at<Vec3b>(i,j)[1];
                     r=src.at<Vec3b>(i,j)[2];
@@ -464,7 +465,7 @@ namespace irt{
 
     }
 
-    void ImgRecoTool::drawHorizon(const unsigned int &resolution, const hNode *hRoot,Mat &src){
+    void ImgRecoTool::drawHorizon(const unsigned int &resolution, const cv::Point *hRoot,Mat &src){
         const int IMG_BORDER_POINTS=2;
         const int NUM_OF_X_POINTS=resolution+IMG_BORDER_POINTS;
         int y,y0,y1,x0,x1=0;
@@ -502,7 +503,7 @@ namespace irt{
         //2
     }
 
-    hNode* ImgRecoTool::createHorizon(const unsigned int &resolution,Mat &img,int binaryThresh){
+    cv::Point* ImgRecoTool::createHorizon(const unsigned int &resolution,Mat &img,int binaryThresh){
         const int IMG_BORDER_POINTS=2;
         const int MAX_RESOLUTION=resolution;
         const int IMG_WIDTH_PIX_SIZE=img.cols;
@@ -511,7 +512,7 @@ namespace irt{
         int x=0;
         Mat binaryImg;
 
-        hNode *root=new hNode[MAX_RESOLUTION+IMG_BORDER_POINTS];
+        cv::Point *root=new cv::Point[MAX_RESOLUTION+IMG_BORDER_POINTS];
 
         threshold(getImageChannel(img,2),binaryImg,binaryThresh,255,0);
 
@@ -521,7 +522,7 @@ namespace irt{
             else
                root[i].x=x;
 
-            //Find the Y of point:
+            //Find the Y of cv::Point:
             for(int y=0;y<IMG_HEIGHT_PIX_SIZE;y++){
                  if(binaryImg.at<uchar>(y,x)==0){
                      root[i].y=y;
@@ -535,9 +536,122 @@ namespace irt{
         return root;
     }
 
-    void ImgRecoTool::releaseHRoot(hNode *root){
+    void ImgRecoTool::markCircleOnFlame(Mat &src,Node* squares, Horizon* horizon){
+        const int minR=243, maxR=255,		//RGB rule of flame color detection.
+                  minG=148, maxG=255,
+                  minB=72, maxB=183;
+
+        const int R=112, G=238, B=28;
+
+
+        float r,g,b, gr, br;
+
+
+        cv::Point* point=new Point[3];
+
+
+        for(const Node *p=squares;p!=NULL;p=p->next){
+            int xSum=0;
+            int ySum=0;
+            int yBigest=0;
+            int xBigest=0;
+            int sum=0;
+
+            for(int i=(int)p->point[0].y;i<=(int)p->point[1].y && i<src.rows;i++){
+                for(int j=(int)p->point[0].x;j<=(int)p->point[1].x && j<src.cols;j++){
+
+
+                    b=src.at<Vec3b>(i,j)[0];
+                    g=src.at<Vec3b>(i,j)[1];
+                    r=src.at<Vec3b>(i,j)[2];
+
+                    gr=g/(r+1);
+                    br=b/(r+1);
+
+                    // Debug
+                    /*if((r>=255)&&((j==304&&i==155)
+                     ||(j==304&&i==154)
+                     ||(j==303&&i==155)
+                     ||(j==302&&i==156)
+                     ||(j==302&&i==157)
+                     ||(j==303&&i==157)
+                     ||(j==302&&i==158)
+                     ||(j==301&&i==159)
+                     ||(j==304&&i==154)
+                     ||(j==306&&i==154)))
+                        cout<<"Flame has been detected!"<<endl;*/
+
+                   if(r>198&&b<130){
+                       cout<<"Flame has been detected!"<<endl;
+
+                   }
+
+                    if((pointUnderHorizon(j,i,horizon->getPrevHorizonPoint(j,src.cols),horizon->getForwardHorizonPoint(j,src.cols)))&&
+                            /*(((r>=minR && r<=maxR) && (g>=minG && g<=maxG) && (b>=minB && b<=maxB)) ||*/
+                            ((gr>=0.4 && gr<=0.99) && (br>=0 && br<=0.56) && (r>179) && (g<238) && (b<130))){
+
+
+                      if(i>yBigest)
+                         yBigest=i;
+
+                      if(j>xBigest)
+                          xBigest=j;
+
+                      xSum+=j;
+                      ySum+=i;
+
+                      sum++;
+
+                    }
+                }
+            }
+
+            if(sum>0){
+
+                point[0].x=(int)xSum/sum;
+                point[0].y=(int)ySum/sum;
+
+                yBigest=abs(yBigest-point->y);
+                xBigest=abs(xBigest-point->x);
+
+                int rad=(yBigest>xBigest?yBigest:xBigest);
+
+                if(rad<40)
+                    rad=40;
+
+                circle(src,point[0],rad,Scalar(R,G,B),2,8,0);
+            }
+        }
+    }
+
+    bool ImgRecoTool::pointUnderHorizon(const int &x,const int &y,const cv::Point* h1,const cv::Point* h2){
+        int yDiagonal,y0,y1,x1,x0=0;
+
+        y0=h1->y;
+        x0=h1->x;
+        y1=h2->y;
+        x1=h2->x;
+
+        yDiagonal=y0+(y1-y0)*(x-x0)/(x1-x0);
+
+        if(y>=yDiagonal)
+            return true;
+
+        return false;
+    }
+
+    void ImgRecoTool::releaseHRoot(cv::Point *root){
        delete[] root;
        root=NULL;
+    }
+
+    void ImgRecoTool::freeNodeLinkedList(Node *p){
+        Node* toDelete = p;
+        while(toDelete != NULL) {
+            Node* next = toDelete->next;
+            delete toDelete;
+            toDelete = next;
+        }
     }
 }
 

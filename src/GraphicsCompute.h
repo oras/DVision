@@ -20,11 +20,12 @@ class GraphicsCompute : public QThread
 private:
     int binaryImgThreshold;
     unsigned int resolution;
-    hNode *hRoot;
+    cv::Point *hRoot;
     QImage *img;
     clock_t thisTime, lastTime;
     QMutex mutex;
     QMutex mutexUpdateImg;
+    Node* root;
 public:
     GraphicsCompute(QObject *parent=0);
 

@@ -142,7 +142,7 @@ void FireFlameReco::on_pushButton_2_clicked(){
 
 void FireFlameReco::on_pushButton_3_clicked(){
     // Save image name + path to disk.
-    QFile mFile("/home/oras/workspace/apm_planner/Data.txt");
+    QFile mFile("/home/or/workspace/apm_planner/Data.txt");
 
     if(mFile.open(QIODevice::ReadWrite | QIODevice::Truncate)){
         QTextStream stream(&mFile);

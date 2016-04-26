@@ -702,7 +702,8 @@ HEADERS += \
     src/VStreamSimulator.h \
     src/ui/DHUD.h \
     src/ui/DetectionHUD.h \
-    src/GraphicsCompute.h
+    src/GraphicsCompute.h \
+    src/ImgToolFactory.h
 
 SOURCES += src/main.cc \
     src/QGCCore.cc \
@@ -937,7 +938,8 @@ SOURCES += src/main.cc \
     src/EventsDetection.cpp \
     src/ui/DHUD.cpp \
     src/ui/DetectionHUD.cpp \
-    src/GraphicsCompute.cpp
+    src/GraphicsCompute.cpp \
+    src/ImgToolFactory.cpp
 
 MacBuild | WindowsBuild : contains(GOOGLEEARTH, enable) { #fix this to make sense ;)
     message(Including support for Google Earth)

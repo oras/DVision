@@ -12,20 +12,25 @@
 #ifndef HORIZON_H
 #define HORIZON_H
 
+#include <opencv/cv.h>
+
+using namespace cv;
 
 class Horizon
 {
 private:
-    int *point;
-    Horizon *next;
+    cv::Point *arr;
+    int size;
 public:
-    Horizon(int x, int y);
+    Horizon(cv::Point* arr,const int &size);
 
-    int* getPoint();
+    int getSize();
 
-    void setNext(Horizon *next);
+    cv::Point* getArr();
 
-    Horizon* getNext();
+    cv::Point* getPrevHorizonPoint(const int &x,const int &imgColSize);
+
+    cv::Point* getForwardHorizonPoint(const int &x, const int &imgColSize);
 };
 
 #endif // HORIZON_H

@@ -39,7 +39,7 @@ void DetectionHUD::streamImage(const QImage &image)
 
 
 
-        if((thisTime-lastTime>1*NUM_SECONDS)){
+        if((thisTime-lastTime>3*NUM_SECONDS)){
             // Set Detection HUD layer:
 
             //setDHUD(img);

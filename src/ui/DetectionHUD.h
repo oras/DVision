@@ -32,7 +32,7 @@ private:
     QGraphicsScene *scene;
     int binaryImgThreshold;
     unsigned int resolution;
-    hNode *hRoot;
+    cv::Point *hRoot;
     clock_t thisTime, lastTime;
     QThread thread;
 
