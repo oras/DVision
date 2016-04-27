@@ -536,7 +536,9 @@ namespace irt{
         return root;
     }
 
-    void ImgRecoTool::markCircleOnFlame(Mat &src,Node* squares, Horizon* horizon){
+    bool ImgRecoTool::markCircleOnFlame(Mat &src,Node* squares, Horizon* horizon){
+        bool warning=false;
+
         const int minR=243, maxR=255,		//RGB rule of flame color detection.
                   minG=148, maxG=255,
                   minB=72, maxB=183;
@@ -620,8 +622,12 @@ namespace irt{
                     rad=40;
 
                 circle(src,point[0],rad,Scalar(R,G,B),2,8,0);
+
+                warning=true;
             }
         }
+
+        return warning;
     }
 
     bool ImgRecoTool::pointUnderHorizon(const int &x,const int &y,const cv::Point* h1,const cv::Point* h2){

@@ -120,7 +120,7 @@ class ImgRecoTool{
 
         static void releaseHRoot(cv::Point *root);
 
-       static void markCircleOnFlame(Mat &src,Node* squares, Horizon* horizon);
+       static bool markCircleOnFlame(Mat &src,Node* squares, Horizon* horizon);
 
         static void freeNodeLinkedList(Node *p);
 private:

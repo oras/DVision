@@ -23,6 +23,9 @@ DetectionHUD::DetectionHUD(QWidget *parent) :
     connect(VStreamSimulator::instance(),SIGNAL(videoStreamDisconnected()), this, SLOT(videoStreamDisconnected()));
 
 
+
+    warn=new WarnSound();
+
     lastTime=clock();
 
 }
@@ -45,7 +48,10 @@ void DetectionHUD::streamImage(const QImage &image)
             //setDHUD(img);
             GraphicsCompute *go=new GraphicsCompute(this);
             connect(go,SIGNAL(imageReady(const QImage&)), this, SLOT(imageReady(const QImage&)),Qt::QueuedConnection);
-           emit startCompute();
+            connect(go,SIGNAL(playWarningSound()), this, SLOT(playWarningSound()));
+            connect(go,SIGNAL(stopWarningSound()), this, SLOT(stopWarningSound()));
+
+            emit startCompute();
 
             lastTime=thisTime;
         }
@@ -85,6 +91,14 @@ void DetectionHUD::imageReady(const QImage &img){
     scene->clear();
     scene->addPixmap(QPixmap::fromImage(img).scaled(ui->graphicsView->size(),
                                                       Qt::KeepAspectRatio, Qt::FastTransformation));
+}
+
+void DetectionHUD::playWarningSound(){
+    warn->playWarnSound(0);
+}
+
+void DetectionHUD::stopWarningSound(){
+    warn->playWarnSound(1);
 }
 
 QImage* DetectionHUD::getImage(){

@@ -41,6 +41,9 @@ public slots:
 signals:
     void imageReady(const QImage &img);
 
+    void playWarningSound();
+
+    void stopWarningSound();
 };
 
 #endif // GRAPHICSDETECTCOMPUTE_H

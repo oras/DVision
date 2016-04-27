@@ -9,6 +9,7 @@
 #include <time.h>
 #include <QThread>
 #include <math.h>
+#include <WarnSound.h>
 
 using namespace std;
 using namespace irt;
@@ -35,6 +36,7 @@ private:
     cv::Point *hRoot;
     clock_t thisTime, lastTime;
     QThread thread;
+    WarnSound* warn;
 
 
     // Set the detection layers
@@ -46,6 +48,10 @@ public slots:
     void videoStreamDisconnected();
     /** @brief Video stream frame ready for update */
     void imageReady(const QImage &img);
+    /** @brief Play warning sound */
+    void playWarningSound();
+    /** @bried Stop playinh warning sound */
+    void stopWarningSound();
 signals:
     void startCompute();
 

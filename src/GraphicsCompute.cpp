@@ -8,11 +8,11 @@ GraphicsCompute::GraphicsCompute(QObject *parent)
 }
 
 
-
 void GraphicsCompute::run(){
     mutex.lock();
-
     Mat matImg;
+
+
     // Display detected horizon:
 
 
@@ -43,7 +43,16 @@ void GraphicsCompute::run(){
                 this->hRoot=ImgRecoTool::createHorizon(50,matImg,170);
 
                 Horizon* horizon=new Horizon(this->hRoot,50);
-                ImgRecoTool::markCircleOnFlame(matImg,this->root,horizon);
+
+                if(ImgRecoTool::markCircleOnFlame(matImg,this->root,horizon)){
+                    emit playWarningSound();
+
+                }
+                else {
+                    emit stopWarningSound();
+
+                }
+
                 *img=ImgRecoTool::cvMatToQImage(matImg);
 
                 ImgRecoTool::releaseHRoot(hRoot);

@@ -703,7 +703,8 @@ HEADERS += \
     src/ui/DHUD.h \
     src/ui/DetectionHUD.h \
     src/GraphicsCompute.h \
-    src/ImgToolFactory.h
+    src/ImgToolFactory.h \
+    src/WarnSound.h
 
 SOURCES += src/main.cc \
     src/QGCCore.cc \
@@ -939,7 +940,8 @@ SOURCES += src/main.cc \
     src/ui/DHUD.cpp \
     src/ui/DetectionHUD.cpp \
     src/GraphicsCompute.cpp \
-    src/ImgToolFactory.cpp
+    src/ImgToolFactory.cpp \
+    src/WarnSound.cpp
 
 MacBuild | WindowsBuild : contains(GOOGLEEARTH, enable) { #fix this to make sense ;)
     message(Including support for Google Earth)
