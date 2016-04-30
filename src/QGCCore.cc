@@ -36,6 +36,7 @@ This file is part of the QGROUNDCONTROL project
 #include "MainWindow.h"
 #include "GAudioOutput.h"
 #include "VStreamSimulator.h"
+#include "EventsDetection.h"
 
 #ifdef OPAL_RT
 #include "OpalLink.h"
@@ -267,6 +268,8 @@ void QGCCore::startUASManager()
 
     QLOG_INFO() << "Start Video Stream Simulator";
     VStreamSimulator::instance();
+    QLOG_INFO() << "Start Event Detection instance and set to hold";
+    EventsDetection::instance();
 }
 
 

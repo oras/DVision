@@ -643,6 +643,9 @@
    </property>
   </action>
   <action name="actionStart_Detection">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Start Detection</string>
    </property>

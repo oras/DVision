@@ -4,6 +4,7 @@
 #include <QtGlobal>
 #include <QtDebug>
 #include <QApplication>
+#include <VStreamSimulator.h>
 
 EventsDetection* EventsDetection::instance(){
     static EventsDetection* _instance=0;
@@ -22,10 +23,26 @@ EventsDetection* EventsDetection::instance(){
 EventsDetection::EventsDetection(QObject *parent)
     :QThread(parent)
 {
-     start();
+     connect(VStreamSimulator::instance(),SIGNAL(streamImage(const QImage&)), this, SLOT(streamImage(const QImage&)));
+     connect(VStreamSimulator::instance(),SIGNAL(videoStreamDisconnected()), this, SLOT(videoStreamDisconnected()));
+
+     imgReady=false;
+     warn=new WarnSound();
+     m_pauseRequired=true;
+
+     soundWarn=true;
+     go=true;
+
+     start(LowPriority);
 }
 
 EventsDetection::~EventsDetection(){
+    mutex.lock();
+    go=false;
+    m_pauseRequired=false;
+    m_pauseManager.wakeAll();
+    mutex.unlock();
+
     wait();
 }
 
@@ -105,10 +122,77 @@ void EventsDetection::startDetection(){
     }
 }
 
-void EventsDetection::start(){
-   // QtConcurrent::run(this,&EventsDetection::startDetection);
+void EventsDetection::run(){
+    cout<<"Events Detection has been loaded!"<<endl;
+    Mat matImg;
+
+    while(go){
+
+        // Hold detection if required.
+        if(m_pauseRequired)
+            m_pauseManager.wait(&m_continue);
+
+        // Resume
+        if(imgReady){
+
+            matImg=ImgRecoTool::QImageToCvMat(img);
+            this->root=ImgRecoTool::getSaliencyMap(matImg,1,100);
+            //ImgRecoTool::contrast(matImg,100);
+            this->hRoot=ImgRecoTool::createHorizon(50,matImg,170);
+
+            Horizon* horizon=new Horizon(this->hRoot,50);
+
+            if(ImgRecoTool::markCircleOnFlame(matImg,this->root,horizon)){
+                if(soundWarn){
+                    warn->playWarnSound(irt::LOCK);
+                    soundWarn=false;
+                }
+
+                // Check if new event deteted, capsulate it and report to log & Google map.
+
+            }
+            else {
+                warn->playWarnSound(irt::STOP_LOCK);
+                soundWarn=true;
+
+            }
+
+            img=ImgRecoTool::cvMatToQImage(matImg);
+
+            ImgRecoTool::releaseHRoot(hRoot);
+            ImgRecoTool::freeNodeLinkedList(root);
+
+            delete horizon;
+
+            emit imageReady(img);
+
+            imgReady=false;
+        }
+    }
 }
 
-void EventsDetection::run(){
-    cout<<"Hellow World"<<endl;
+void EventsDetection::streamImage(const QImage &image){
+    if(!imgReady){
+        resume();
+        this->img=image;
+        imgReady=true;
+    }
 }
+
+void EventsDetection::resume(){
+    m_pauseRequired=false;
+    m_pauseManager.wakeAll();
+}
+
+void EventsDetection::pause(){
+    m_pauseRequired=true;
+}
+
+bool EventsDetection::isPause(){
+    return m_pauseRequired;
+}
+
+void EventsDetection::videoStreamDisconnected(){
+    pause();
+}
+

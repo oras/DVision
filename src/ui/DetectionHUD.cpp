@@ -2,7 +2,7 @@
 #include "ui_DetectionHUD.h"
 #include "configuration.h"
 #include <qquickview.h>
-
+#include <EventsDetection.h>
 
 DetectionHUD::DetectionHUD(QWidget *parent) :
     QWidget(parent),
@@ -19,9 +19,9 @@ DetectionHUD::DetectionHUD(QWidget *parent) :
     ui->graphicsView->setVerticalScrollBarPolicy ( Qt::ScrollBarAlwaysOff );
     ui->graphicsView->show();
 
-    connect(VStreamSimulator::instance(),SIGNAL(streamImage(const QImage&)), this, SLOT(streamImage(const QImage&)));
+    //connect(VStreamSimulator::instance(),SIGNAL(streamImage(const QImage&)), this, SLOT(streamImage(const QImage&)));
     connect(VStreamSimulator::instance(),SIGNAL(videoStreamDisconnected()), this, SLOT(videoStreamDisconnected()));
-
+    connect(EventsDetection::instance(),SIGNAL(imageReady(const QImage&)), this, SLOT(imageReady(const QImage&)),Qt::QueuedConnection);
 
 
     warn=new WarnSound();
@@ -32,7 +32,7 @@ DetectionHUD::DetectionHUD(QWidget *parent) :
 
 void DetectionHUD::streamImage(const QImage &image)
 {
-    ui->label->hide();
+
 
     if (!image.isNull())
     {
@@ -88,17 +88,10 @@ DetectionHUD::~DetectionHUD()
 
 void DetectionHUD::imageReady(const QImage &img){
     // Refresh scene & update next video frame.
+     ui->label->hide();
     scene->clear();
     scene->addPixmap(QPixmap::fromImage(img).scaled(ui->graphicsView->size(),
                                                       Qt::KeepAspectRatio, Qt::FastTransformation));
-}
-
-void DetectionHUD::playWarningSound(){
-    warn->playWarnSound(0);
-}
-
-void DetectionHUD::stopWarningSound(){
-    warn->playWarnSound(1);
 }
 
 QImage* DetectionHUD::getImage(){

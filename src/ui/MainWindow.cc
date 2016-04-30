@@ -69,7 +69,6 @@ This file is part of the QGROUNDCONTROL project
 #include "DroneshareDialog.h"
 #include "HorizonSettings.h"
 #include "FireSmokeReco.h"
-#include "DetectionHUD.h"
 
 // FIXME Move
 #include "PxQuadMAV.h"
@@ -384,6 +383,8 @@ MainWindow::MainWindow(QWidget *parent):
     }
     settings.endGroup();
 
+    hud=new DetectionHUD(this);
+    hud->setWindowFlags( Qt::Window);
 }
 
 MainWindow::~MainWindow()
@@ -2543,10 +2544,15 @@ void MainWindow::on_actionFlame_triggered(){
 }
 
 void MainWindow::on_actionStart_Detection_triggered(){
-    if(ui.actionStart_Detection->text()=="Stop Detection")
+
+    if(EventsDetection::instance()->isPause()){
         ui.actionStart_Detection->setText("Start Detection");
-    else
+        EventsDetection::instance()->resume();
+    }
+    else{
         ui.actionStart_Detection->setText("Stop Detection");
+        EventsDetection::instance()->pause();
+    }
 
     //detection.startDetection();
 }
@@ -2581,7 +2587,11 @@ void MainWindow::on_actionSmoke_Recognition_Settings_triggered()
 }
 
 void MainWindow::on_actionDetection_HUD_triggered(){
-    DetectionHUD* hud=new DetectionHUD(this);
-    hud->setWindowFlags( Qt::Window);
-    hud->show();
+    if(hud->isVisible()){
+
+        hud->close();
+    }
+    else{
+       hud->show();
+    }
 }

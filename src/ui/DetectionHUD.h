@@ -48,10 +48,6 @@ public slots:
     void videoStreamDisconnected();
     /** @brief Video stream frame ready for update */
     void imageReady(const QImage &img);
-    /** @brief Play warning sound */
-    void playWarningSound();
-    /** @bried Stop playinh warning sound */
-    void stopWarningSound();
 signals:
     void startCompute();
 

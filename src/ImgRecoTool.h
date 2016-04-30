@@ -88,6 +88,9 @@ private:
 
 namespace irt{
 
+static const int LOCK=0;
+static const int STOP_LOCK=1;
+
 class ImgRecoTool{
     public:
 

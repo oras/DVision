@@ -75,7 +75,7 @@ This file is part of the QGROUNDCONTROL project
 #include "QGCToolBar.h"
 #include "SlugsDataSensorView.h"
 #include "LogCompressor.h"
-
+#include "DetectionHUD.h"
 #include "SlugsHilSim.h"
 
 #include "SlugsPadCameraControl.h"
@@ -475,6 +475,7 @@ protected:
     bool autoProxyMode;
     QPointer<QGCFlightGearLink> fgLink;
     QTimer windowNameUpdateTimer;
+    DetectionHUD* hud;
 
 
 private slots:

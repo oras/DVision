@@ -3,7 +3,7 @@
 GraphicsCompute::GraphicsCompute(QObject *parent)
     :QThread(parent)
 {
-    connect(parent,SIGNAL(startCompute()), this, SLOT(startCompute()));
+    //connect(parent,SIGNAL(startCompute()), this, SLOT(startCompute()));
    img=dynamic_cast<DetectionHUD*> (parent)->getImage();
 }
 

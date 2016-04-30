@@ -4,11 +4,13 @@
 #include <QSound>
 #include <QThread>
 
+
 class WarnSound : public QThread
 {
 private:
     QSound* lock;
     QSound* attention;
+    QSound* alarm;
     int num;            // Sound name to play
 public:
     static const int LOCK=0;

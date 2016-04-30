@@ -570,23 +570,6 @@ namespace irt{
                     gr=g/(r+1);
                     br=b/(r+1);
 
-                    // Debug
-                    /*if((r>=255)&&((j==304&&i==155)
-                     ||(j==304&&i==154)
-                     ||(j==303&&i==155)
-                     ||(j==302&&i==156)
-                     ||(j==302&&i==157)
-                     ||(j==303&&i==157)
-                     ||(j==302&&i==158)
-                     ||(j==301&&i==159)
-                     ||(j==304&&i==154)
-                     ||(j==306&&i==154)))
-                        cout<<"Flame has been detected!"<<endl;*/
-
-                   if(r>198&&b<130){
-                       cout<<"Flame has been detected!"<<endl;
-
-                   }
 
                     if((pointUnderHorizon(j,i,horizon->getPrevHorizonPoint(j,src.cols),horizon->getForwardHorizonPoint(j,src.cols)))&&
                             /*(((r>=minR && r<=maxR) && (g>=minG && g<=maxG) && (b>=minB && b<=maxB)) ||*/
