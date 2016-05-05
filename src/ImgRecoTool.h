@@ -27,6 +27,7 @@
 #include <QImage>
 #include <QPixmap>
 #include <Horizon.h>
+#include <ImgToolFactory.h>
 
 using namespace cv;
 using namespace std;
@@ -50,89 +51,96 @@ class Node{
     }
 };
 
-class Circle{
-public:
-    int radios;
-    cv::Point p;
-    Circle* next;
-
-    Circle(int x, int y, int radios){
-
-    }
-
-private:
-    int getCenter(const int &x1,const int &x2){
-
-        // Check if even
-        int length=abs(x2-x1);
-        if(length%2){
-            return length/2+1;
-        }
-        else
-            return length/2;
-    }
-
-    int getRadios(const int &x1, const int &y1, const int &x2, const int &y2){
-        int lengthX=abs(x2-x1);
-        int lengthY=abs(y2-y1);
-
-        double caliber=double(sqrt(pow(lengthX,2))+double(pow(lengthY,2)));
-
-        int radios=caliber/2;
-
-        return radios;
-    }
-};
-
-
 
 namespace irt{
 
 static const int LOCK=0;
+static const int SQUARE=0;
+static const int CIRCLE=1;
 static const int STOP_LOCK=1;
+
 
 class ImgRecoTool{
     public:
-
-
        static Mat hsiTransform(Mat &src);
 
-        static Mat getRGBHistogram(Mat &src);
+       static Mat getRGBHistogram(Mat &src);
 
-        static Mat getImageChannel(Mat mat,int num);
+       static Mat getImageChannel(Mat mat,int num);
 
-        static Node* getSaliencyMap(Mat &srcImg, int scan, int thresh);
+       static Node* getSaliencyMap(Mat &srcImg, int scan, int thresh);
 
-        static void drawSaliencyDatas(Node *squares, Mat &src);
+       static void drawSaliencyDatas(Node *squares, Mat &src);
 
-        static void CannyThreshold(int lowThreshold,Mat &src);
+       static void CannyThreshold(int lowThreshold,Mat &src);
 
-        static void transferToBinaryImage(int val, Mat &src);
+       static void transferToBinaryImage(int val, Mat &src);
 
-        static QImage cvMatToQImage(const Mat &inMat);
+       static QImage cvMatToQImage(const Mat &inMat);
 
-        static Mat QImageToCvMat( const QImage &inImage, bool inCloneImageData = true );
+       static Mat QImageToCvMat( const QImage &inImage, bool inCloneImageData = true );
 
-        static void markRGBflameAreas(Mat &src, Node *areas, int horizon);
+       static void markRGBflameAreas(Mat &src, Node *areas, int horizon);
 
-        static void contrast(Mat &src, int val);
+       static void contrast(Mat &src, int val);
 
-        static void drawHorizon(const unsigned int &resolution, const cv::Point *hRoot, Mat &src);
+       static void drawHorizon(const unsigned int &resolution, const cv::Point *hRoot, Mat &src);
 
-        static cv::Point* createHorizon(const unsigned int &resolution,Mat &img,int binaryThresh);
+       static cv::Point* createHorizon(const unsigned int &resolution,Mat &img,int binaryThresh);
 
-        static void releaseHRoot(cv::Point *root);
+       static void releaseHRoot(cv::Point *root);
 
        static bool markCircleOnFlame(Mat &src,Node* squares, Horizon* horizon);
 
-        static void freeNodeLinkedList(Node *p);
+       static void drawCircles(vector<Circ>* v,Mat &src);
+
+
+
+       // Generic free linked list function.
+       template <typename T> static void freeLinkedList(T* p){
+           T* toDelete = p;
+           while(toDelete != NULL) {
+               T* next = toDelete->next;
+               delete toDelete;
+               toDelete = next;
+           }
+       }
+
 private:
-
-
-
         static cv::Point* pointInSquare(int x,int y, Node *squares);
 
         static bool pointUnderHorizon(const int &x,const int &y,const cv::Point* h1,const cv::Point* h2);
+
+        static bool circleIsContained(Circ &c1, Circ &c2);
+
+        static bool circleIsCutt(Circ &c1, Circ &c2);
+
+        static Circ* circleUnion(Circ &c1, Circ &c2);
+
+        template <typename TN> static void addNewNode(vector<TN>* v, TN* node){
+            //ints::iterator it = std::lower_bound( cont.begin(), cont.end(), value, std::greater<int>() ); // find proper position in descending order
+              //  cont.insert( it, value ); // insert before iterator it
+
+            if(dynamic_cast<Circ*> (node)!=NULL){
+                for( typename vector<TN>::iterator it=v->begin(); it!=v->end();it++){
+
+                    // Check if new circle is contained in exisst one
+                    if(circleIsContained(*node,*it))
+                        return;
+
+                    // Other wise check if it's part contained (Cuts)
+                    if(circleIsCutt(*node,*it)){
+                        v->push_back(*circleUnion(*node,*it));
+                        v->erase(it);
+                            return;
+                    }
+                }
+            }
+
+            v->push_back(*node);
+        }
+
+
 
 signals:
     void imageReady(const QImage &img);

@@ -56,7 +56,7 @@ void GraphicsCompute::run(){
                 *img=ImgRecoTool::cvMatToQImage(matImg);
 
                 ImgRecoTool::releaseHRoot(hRoot);
-                ImgRecoTool::freeNodeLinkedList(root);
+                ImgRecoTool::freeLinkedList(root);
 
                 delete horizon;
 
@@ -73,7 +73,7 @@ void GraphicsCompute::run(){
                 ImgRecoTool::drawSaliencyDatas(this->root,matImg);
                 *img=ImgRecoTool::cvMatToQImage(matImg);
 
-                ImgRecoTool::freeNodeLinkedList(root);
+                ImgRecoTool::freeLinkedList(root);
 
 
                 emit imageReady(*img);

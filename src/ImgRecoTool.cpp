@@ -13,7 +13,6 @@
 #include <QtGlobal>
 #include <QtDebug>
 
-
 namespace irt{
 
     Mat ImgRecoTool::hsiTransform(Mat &src){
@@ -538,6 +537,7 @@ namespace irt{
 
     bool ImgRecoTool::markCircleOnFlame(Mat &src,Node* squares, Horizon* horizon){
         bool warning=false;
+        vector<Circ>* vCircle=new vector<Circ>();
 
         const int minR=243, maxR=255,		//RGB rule of flame color detection.
                   minG=148, maxG=255,
@@ -548,11 +548,11 @@ namespace irt{
 
         float r,g,b, gr, br;
 
-
-        cv::Point* point=new Point[3];
-
+        cv::Point* point=new Point[2];
 
         for(const Node *p=squares;p!=NULL;p=p->next){
+
+
             int xSum=0;
             int ySum=0;
             int yBigest=0;
@@ -592,23 +592,23 @@ namespace irt{
             }
 
             if(sum>0){
-
                 point[0].x=(int)xSum/sum;
                 point[0].y=(int)ySum/sum;
 
-                yBigest=abs(yBigest-point->y);
-                xBigest=abs(xBigest-point->x);
+                point[1].y=abs(yBigest-point->y);
+                point[1].x=abs(xBigest-point->x);
 
-                int rad=(yBigest>xBigest?yBigest:xBigest);
+                ImgToolFactory* c=ImgToolFactory::makeObject(CIRCLE,point);
 
-                if(rad<40)
-                    rad=40;
+                //circle(src,((Circ*)c)->getCircleCentralPoint(),((Circ*)c)->getCircleRadios(),Scalar(R,G,B),2,8,0);
 
-                circle(src,point[0],rad,Scalar(R,G,B),2,8,0);
+                addNewNode(vCircle,(Circ*)c);
 
                 warning=true;
             }
         }
+
+        drawCircles(vCircle,src);
 
         return warning;
     }
@@ -634,14 +634,71 @@ namespace irt{
        root=NULL;
     }
 
-    void ImgRecoTool::freeNodeLinkedList(Node *p){
-        Node* toDelete = p;
-        while(toDelete != NULL) {
-            Node* next = toDelete->next;
-            delete toDelete;
-            toDelete = next;
-        }
+    bool ImgRecoTool::circleIsContained(Circ &c1, Circ &c2){
+        int x1=c1.getCircleCentralPoint().x;
+        int y1=c1.getCircleCentralPoint().y;
+        int r1=c1.getCircleRadios();
+        int x2=c2.getCircleCentralPoint().x;
+        int y2=c2.getCircleCentralPoint().y;
+        int r2=c2.getCircleRadios();
+
+        /* In order to define if circle c1 is included in circle c2
+         * We need to use the following formula:
+         * sqrt((x1-x2)^2)+((y1-y2)^2))+c1.rad<=c2.rad
+         */
+
+        if((sqrt(pow(x1-x2,2)+pow(y1-y2,2))+r1)<=r2);
+            return true;
+
+        return false;
     }
+
+    bool ImgRecoTool::circleIsCutt(Circ &c1, Circ &c2){
+        int x1=c1.getCircleCentralPoint().x;
+        int y1=c1.getCircleCentralPoint().y;
+        int x2=c2.getCircleCentralPoint().x;
+        int y2=c2.getCircleCentralPoint().y;
+        int r2=c2.getCircleRadios();
+
+        /*This function will be satisfy if the central first circle point will
+         * be found on the other circle area, after we used the include circle
+         * in other circle function and got false we can assure the theory of the
+         * first circle is cutting the second one is true.
+         *
+         * Her we will use the following formula:
+         * (x1-x2)^2+(y1-y2)^2<=(c2.radios)^2
+         *
+         */
+
+        if((pow(x1-x2,2)+pow(y1-y2,2))<=pow(r2,2))
+            return true;
+
+        return false;
+    }
+
+    Circ* ImgRecoTool::circleUnion(Circ &c1, Circ &c2){
+        int newRad=(c1.getCircleRadios()+c2.getCircleRadios())/2;
+        int newX=(c1.getCircleCentralPoint().x+c2.getCircleCentralPoint().x)/2;
+        int newY=(c1.getCircleCentralPoint().y+c2.getCircleCentralPoint().y)/2;
+
+        cv::Point point[2];
+
+        point[0].x=newX;
+        point[0].y=newY;
+        point[1].x=point[1].y=newRad;
+
+        return (Circ*)ImgToolFactory::makeObject(CIRCLE,point);
+    }
+
+    void ImgRecoTool::drawCircles(vector<Circ> *v,Mat &src){
+        const int R=112, G=238, B=28;
+
+          for( typename vector<Circ>::iterator it=v->begin(); it!=v->end();it++){
+              circle(src,(&(*it))->getCircleCentralPoint(),(&(*it))->getCircleRadios(),Scalar(R,G,B),2,8,0);
+
+          }
+    }
+
 }
 
 

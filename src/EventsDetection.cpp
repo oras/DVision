@@ -160,7 +160,7 @@ void EventsDetection::run(){
             img=ImgRecoTool::cvMatToQImage(matImg);
 
             ImgRecoTool::releaseHRoot(hRoot);
-            ImgRecoTool::freeNodeLinkedList(root);
+            ImgRecoTool::freeLinkedList<Node>(root);
 
             delete horizon;
 
