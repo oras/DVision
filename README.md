@@ -61,6 +61,10 @@ sudo apt-get install qt5-qmake qt5-default \
   libqt5svg5-dev qtdeclarative5-qtquick2-plugin
 sudo apt-get install git libsdl1.2-dev  libsndfile-dev \
   flite1-dev libssl-dev libudev-dev libsdl2-dev
+  
+You must install the OpenCV project in order to recampile it
+using the following link:
+http://docs.opencv.org/2.4/doc/tutorials/introduction/linux_install/linux_install.html
 ```
 
 2) Clone the repository in your workspace:
