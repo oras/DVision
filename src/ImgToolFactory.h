@@ -14,6 +14,7 @@ public:
      cv::Point *point;
 
     static ImgToolFactory *makeObject(int name,cv::Point point[]);
+
 };
 
 class Squa: public ImgToolFactory
@@ -30,15 +31,19 @@ class Circ : public ImgToolFactory
 {
 private:
     int rad;
-    Circ* next;
 public:
     Circ(cv::Point* point){
-        this->point=point;
+        this->point=new cv::Point();
+        this->point->x=point->x;
+        this->point->y=point->y;
 
         rad=(point[1].y>point[1].x?point[1].y:point[1].x);
 
         if(rad<40)
             rad=40;
+
+        if(rad>400)
+            rad=400;
     }
 
     cv::Point getCircleCentralPoint(){
@@ -47,14 +52,6 @@ public:
 
     int getCircleRadios(){
         return rad;
-    }
-
-    void setNext(Circ* next){
-        this->next=next;
-    }
-
-    Circ* getNext(){
-        return next;
     }
 };
 

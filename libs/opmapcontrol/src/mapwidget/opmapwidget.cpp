@@ -66,6 +66,9 @@ namespace mapcontrol
         this->setMouseTracking(followmouse);
         SetShowCompass(true);
 
+
+
+
     }
     void OPMapWidget::SetShowDiagnostics(bool const& value)
     {

@@ -109,14 +109,14 @@ namespace internals {
         PointLatLng GetLastLocationInBounds(){return LastLocationInBounds;}
         void SetLastLocationInBounds(const PointLatLng &value){LastLocationInBounds=value;}
 
-        Size GetsizeOfMapArea(){return sizeOfMapArea;}
-        void SetsizeOfMapArea(const Size &value){sizeOfMapArea=value;}
+        core::Size GetsizeOfMapArea(){return sizeOfMapArea;}
+        void SetsizeOfMapArea(const core::Size &value){sizeOfMapArea=value;}
 
-        Size GetminOfTiles(){return minOfTiles;}
-        void SetminOfTiles(const Size &value){minOfTiles=value;}
+        core::Size GetminOfTiles(){return minOfTiles;}
+        void SetminOfTiles(const core::Size &value){minOfTiles=value;}
 
-        Size GetmaxOfTiles(){return maxOfTiles;}
-        void SetmaxOfTiles(const Size &value){maxOfTiles=value;}
+        core::Size GetmaxOfTiles(){return maxOfTiles;}
+        void SetmaxOfTiles(const core::Size &value){maxOfTiles=value;}
 
         Rectangle GettileRect(){return tileRect;}
         void SettileRect(const Rectangle &value){tileRect=value;}
@@ -164,7 +164,7 @@ namespace internals {
 
         PointLatLng FromLocalToLatLng(int const& x, int const& y);
 
-        Point FromLatLngToLocal(PointLatLng const& latlng);
+        core::Point FromLatLngToLocal(PointLatLng const& latlng);
 
         int GetMaxZoomToFitRect(RectLatLng const& rect);
 
@@ -223,9 +223,9 @@ namespace internals {
         MouseWheelZoomType::Types mousewheelzoomtype;
 
 
-        Size sizeOfMapArea;
-        Size minOfTiles;
-        Size maxOfTiles;
+        core::Size sizeOfMapArea;
+        core::Size minOfTiles;
+        core::Size maxOfTiles;
 
         core::Point tilePoint;
 
@@ -248,7 +248,7 @@ namespace internals {
         QMutex Mdebug;
         static qlonglong debugcounter;
 #endif
-        Size TooltipTextPadding;
+        core::Size TooltipTextPadding;
 
         MapType::Types mapType;
 

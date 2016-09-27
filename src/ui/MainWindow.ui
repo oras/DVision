@@ -158,7 +158,10 @@
     <addaction name="actionHorizon_Settings"/>
     <addaction name="actionStart_Detection"/>
     <addaction name="actionDetection_HUD"/>
+    <addaction name="actionShow_IR_Monitor"/>
+    <addaction name="actionIR_RGB_Calibration"/>
     <addaction name="actionLog"/>
+    <addaction name="actionSimulator_Mode"/>
    </widget>
    <addaction name="menuMGround"/>
    <addaction name="menuNetwork"/>
@@ -692,6 +695,27 @@
    </property>
    <property name="text">
     <string>Show Detection HUD</string>
+   </property>
+  </action>
+  <action name="actionShow_IR_Monitor">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show IR Monitor</string>
+   </property>
+  </action>
+  <action name="actionIR_RGB_Calibration">
+   <property name="text">
+    <string>IR - RGB Calibration</string>
+   </property>
+  </action>
+  <action name="actionSimulator_Mode">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Simulator Mode</string>
    </property>
   </action>
  </widget>

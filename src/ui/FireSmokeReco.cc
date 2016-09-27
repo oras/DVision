@@ -6,7 +6,6 @@
 #include <QFileDialog>
 #include <QTextStream>
 #include <VideoCapt.h>
-#include <Analyze3D.h>
 
 FireSmokeReco::FireSmokeReco(QWidget *parent) :
     QDialog(parent),
@@ -105,8 +104,8 @@ void FireSmokeReco::on_horizontalSlider_2_actionTriggered(int action)
 
 void FireSmokeReco::on_pushButton_2_clicked()
 {
-   VideoCapt* cap=new VideoCapt(this);
-   cap->exec();
+   //VideoCapt* cap=new VideoCapt(this);
+   //cap->exec();
    //cap->hide();
    //delete cap;
    //cap=NULL;
@@ -114,6 +113,5 @@ void FireSmokeReco::on_pushButton_2_clicked()
 
 void FireSmokeReco::on_pushButton_3_clicked()
 {
-    Analyze3D *analyze=new Analyze3D(this);
-    analyze->show();
+
 }

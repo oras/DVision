@@ -32,7 +32,7 @@ private:
     float resolution;
     bool scanMethode;
 public:
-    Node *root;
+    irt::Node *root;
     QGraphicsScene* scene;
     explicit FireFlameReco(QWidget *parent);
     ~FireFlameReco();
@@ -51,7 +51,7 @@ public:
 
     bool getScanMethod();
 
-    Node *getSaliencyMapRoot();
+    irt::Node *getSaliencyMapRoot();
 private slots:
     void on_horizontalSlider_actionTriggered(int action);
 
@@ -75,7 +75,7 @@ private:
 
     void updateDemoImage();
 
-    void freeNodeLinkedList(Node *root);
+    void freeNodeLinkedList(irt::Node *root);
 
     void updateImage(Mat &src);
 };

@@ -41,7 +41,7 @@ struct LoadTask
     int Zoom;
 
 
-    LoadTask(Point pos, int zoom)
+    LoadTask(core::Point pos, int zoom)
      {
         Pos = pos;
         Zoom = zoom;

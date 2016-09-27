@@ -161,10 +161,10 @@ void FireFlameReco::on_pushButton_5_clicked(){
    this->close();
 }
 
-void FireFlameReco::freeNodeLinkedList(Node *p){
-    Node* toDelete = p;
+void FireFlameReco::freeNodeLinkedList(irt::Node *p){
+    irt::Node* toDelete = p;
     while(toDelete != NULL) {
-        Node* next = toDelete->next;
+        irt::Node* next = toDelete->next;
         delete toDelete;
         toDelete = next;
     }
@@ -198,6 +198,6 @@ void FireFlameReco::on_horizontalSlider_3_actionTriggered(int action)
     ui->lcdNumber_3->display(action);
 }
 
-Node *FireFlameReco::getSaliencyMapRoot(){
+irt::Node *FireFlameReco::getSaliencyMapRoot(){
     return this->root;
 }

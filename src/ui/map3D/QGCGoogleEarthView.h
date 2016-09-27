@@ -130,7 +130,8 @@ public slots:
     void initializeGoogleEarth();
     /** @brief Print a Windows exception */
     void printWinException(int no, QString str1, QString str2, QString str3);
-
+    /** @bried Mark on map fire area */
+    void markFire();
 public:
     /** @brief Execute java script inside the Google Earth window */
     QVariant javaScript(QString javascript);

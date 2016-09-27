@@ -28,11 +28,16 @@
 #include <QPixmap>
 #include <Horizon.h>
 #include <ImgToolFactory.h>
+#include <QMutex>
+#include <QWaitCondition>
 
 using namespace cv;
 using namespace std;
 
 const int POINT_SIZE=2;
+
+
+namespace irt{
 
 class Node{
     public:
@@ -49,19 +54,28 @@ class Node{
 
         next = y;
     }
+
 };
 
 
-namespace irt{
 
 static const int LOCK=0;
 static const int SQUARE=0;
 static const int CIRCLE=1;
 static const int STOP_LOCK=1;
 
+static bool m_pauseRequired=false;
+static QMutex m_continue;
+static QWaitCondition m_pauseManager;
+
+static bool mIR_pauseRequired=false;
+static QMutex mIR_continue;
+static QWaitCondition mIR_pauseManager;
 
 class ImgRecoTool{
     public:
+
+
        static Mat hsiTransform(Mat &src);
 
        static Mat getRGBHistogram(Mat &src);
@@ -90,9 +104,9 @@ class ImgRecoTool{
 
        static void releaseHRoot(cv::Point *root);
 
-       static bool markCircleOnFlame(Mat &src,Node* squares, Horizon* horizon);
+       static vector<Circ>* markCircleOnFlame(Mat &src,Mat &srcIR,Node* squares, Horizon* horizon,int dX, int dY);
 
-       static void drawCircles(vector<Circ>* v,Mat &src);
+       static void drawCircles(const vector<Circ>* v,Mat &src);
 
 
 
@@ -117,6 +131,8 @@ private:
 
         static Circ* circleUnion(Circ &c1, Circ &c2);
 
+        static bool isHotZone(Mat &src,int r, int c, int dX, int dY);
+
         template <typename TN> static void addNewNode(vector<TN>* v, TN* node){
             //ints::iterator it = std::lower_bound( cont.begin(), cont.end(), value, std::greater<int>() ); // find proper position in descending order
               //  cont.insert( it, value ); // insert before iterator it
@@ -127,17 +143,26 @@ private:
                     // Check if new circle is contained in exisst one
                     if(circleIsContained(*node,*it))
                         return;
+                    else if(circleIsContained(*it,*node)){
+                    //    v->push_back(*node);
+                   //     it=v->erase(it);
+
+                        return;
+                    }
 
                     // Other wise check if it's part contained (Cuts)
                     if(circleIsCutt(*node,*it)){
-                        v->push_back(*circleUnion(*node,*it));
-                        v->erase(it);
+                       // Circ* c=(Circ*)ImgToolFactory::makeObject(CIRCLE,(&(*it))->point);
+                       // it=v->erase(it);
+                        //v->push_back(*circleUnion(*node,*c));
                             return;
                     }
                 }
+
+                v->push_back(*node);
             }
 
-            v->push_back(*node);
+
         }
 
 

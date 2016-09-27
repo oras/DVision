@@ -44,7 +44,7 @@ class PureProjection
 
 
 public:
-    virtual Size TileSize()const=0;
+    virtual core::Size TileSize()const=0;
 
     virtual double Axis()const=0;
 
@@ -57,14 +57,14 @@ public:
     virtual QString Type(){return "PureProjection";}
     core::Point FromLatLngToPixel(const PointLatLng &p,const int &zoom);
 
-    PointLatLng FromPixelToLatLng(const Point &p,const int &zoom);
+    internals::PointLatLng FromPixelToLatLng(const core::Point &p,const int &zoom);
     virtual core::Point FromPixelToTileXY(const core::Point &p);
     virtual core::Point FromTileXYToPixel(const core::Point &p);
-    virtual  Size GetTileMatrixMinXY(const int &zoom)=0;
-    virtual  Size GetTileMatrixMaxXY(const int &zoom)=0;
-    virtual Size GetTileMatrixSizeXY(const int &zoom);
+    virtual  core::Size GetTileMatrixMinXY(const int &zoom)=0;
+    virtual  core::Size GetTileMatrixMaxXY(const int &zoom)=0;
+    virtual core::Size GetTileMatrixSizeXY(const int &zoom);
     int GetTileMatrixItemCount(const int &zoom);
-    virtual Size GetTileMatrixSizePixel(const int &zoom);
+    virtual core::Size GetTileMatrixSizePixel(const int &zoom);
     QList<core::Point> GetAreaTileList(const RectLatLng &rect,const int &zoom,const int &padding);
     virtual double GetGroundResolution(const int &zoom,const double &latitude);
 

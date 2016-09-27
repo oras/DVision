@@ -34,9 +34,13 @@ private:
     UASInterface* uasMain;
     bool go;
 
+
+
  public:
     static VStreamSimulator* instance();
+    static bool isSimOnlie();
     ~VStreamSimulator();
+
  public slots:
     /** @brief Set the video stream into disconnected mode */
     void heartbeatTimeout(bool timeout, unsigned int ms);
@@ -56,6 +60,8 @@ signals:
     void msleep(int ms);
     LinkInterface* link;
     void run();
+    bool vSim;
+    String filename;
 };
 
 #endif // VSTREAMSIMULATOR_H

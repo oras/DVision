@@ -25,14 +25,14 @@ private:
     QString default_img;     // Store the name of the default image.
     int binaryImgThreshold;
     unsigned int resolution;
-    Node *root;
+    irt::Node *root;
     cv::Point *hRoot;
     int hRootSize;
     QGraphicsScene* scene;
     Mat defaultImg;
     Mat binaryImg;
 public:
-    HorizonSettings(QWidget *parent,Node *head);
+    HorizonSettings(QWidget *parent,irt::Node *head);
     ~HorizonSettings();
 
      void setDefaultImg(QString name);

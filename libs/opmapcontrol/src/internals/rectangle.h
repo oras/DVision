@@ -107,7 +107,7 @@ public:
              this->width += 2*width;
              this->height += 2*height;
           }
-    void Inflate(Size &size)
+    void Inflate(core::Size &size)
           {
 
              Inflate(size.Width(), size.Height());

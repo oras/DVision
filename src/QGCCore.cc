@@ -36,6 +36,7 @@ This file is part of the QGROUNDCONTROL project
 #include "MainWindow.h"
 #include "GAudioOutput.h"
 #include "VStreamSimulator.h"
+#include "CameraCapture.h"
 #include "EventsDetection.h"
 
 #ifdef OPAL_RT
@@ -64,9 +65,12 @@ This file is part of the QGROUNDCONTROL project
  * @param argv The string array of parameters
  **/
 
+ bool QGCCore::SIMULATOR=false;
 
 QGCCore::QGCCore(int &argc, char* argv[]) : QApplication(argc, argv)
 {
+
+
     // Set settings format
     QSettings::setDefaultFormat(QSettings::IniFormat);
 
@@ -77,6 +81,7 @@ QGCCore::QGCCore(int &argc, char* argv[]) : QApplication(argc, argv)
     this->setOrganizationDomain("com.diydrones");
 
     m_mouseWheelFilter = new QGCMouseWheelEventFilter(this);
+
 }
 
 void QGCCore::initialize()
@@ -94,6 +99,8 @@ void QGCCore::initialize()
     // clear them if they mismatch
     // QGC then falls back to default
     QSettings settings;
+
+
 
     // Show user an upgrade message if QGC got upgraded (see code below, after splash screen)
     bool upgraded = false;
@@ -266,10 +273,15 @@ void QGCCore::startUASManager()
         }
     }
 
-    QLOG_INFO() << "Start Video Stream Simulator";
-    VStreamSimulator::instance();
-    QLOG_INFO() << "Start Event Detection instance and set to hold";
-    EventsDetection::instance();
+
+        QLOG_INFO() << "Start Video Stream Simulator";
+        VStreamSimulator::instance();
+
+
+        QLOG_INFO() << "Start Camera Capture";
+        QProcess::startDetached("/usr/bin/bash",QStringList() << "/home/or/EasyCap/easyca[.sh");
+
+
 }
 
 

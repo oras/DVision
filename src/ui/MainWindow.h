@@ -56,7 +56,6 @@ This file is part of the QGROUNDCONTROL project
 //#include "MAVLinkProtocol.h"
 #include "MAVLinkSimulationLink.h"
 #include "ObjectDetectionView.h"
-#include "DHUD.h"
 #include "submainwindow.h"
 #include "JoystickWidget.h"
 #include "input/JoystickInput.h"
@@ -76,6 +75,8 @@ This file is part of the QGROUNDCONTROL project
 #include "SlugsDataSensorView.h"
 #include "LogCompressor.h"
 #include "DetectionHUD.h"
+#include "IRCalibration.h"
+#include "IR.h"
 #include "SlugsHilSim.h"
 
 #include "SlugsPadCameraControl.h"
@@ -92,6 +93,9 @@ This file is part of the QGROUNDCONTROL project
 #include <QtConcurrent/qtconcurrentrun.h>
 #include <ImgRecoTool.h>
 #include <FireFlameReco.h>
+#include <DeviceCaptureSettings.h>
+
+using namespace irt;
 
 class QGCMapTool;
 class QGCMAVLinkMessageSender;
@@ -279,6 +283,7 @@ signals:
     void autoProxyChanged(bool);
 
 public:
+    IRCalibration* irc;
     QGCMAVLinkLogPlayer* getLogPlayer()
     {
         return logPlayer;
@@ -291,6 +296,8 @@ public:
 
 
     bool heartbeatEnabled() { return m_heartbeatEnabled; }
+
+    DeviceCaptureSettings *dcSet;
 protected:
 
     MainWindow(QWidget *parent = 0);
@@ -477,6 +484,9 @@ protected:
     QTimer windowNameUpdateTimer;
     DetectionHUD* hud;
 
+    IR* ir;
+
+
 
 private slots:
     void showAutoUpdateDownloadDialog(QString version, QString releaseType, QString url, QString name);
@@ -500,6 +510,12 @@ private slots:
     void on_actionSmoke_Recognition_Settings_triggered();
 
     void on_actionDetection_HUD_triggered();
+
+    void on_actionShow_IR_Monitor_triggered();
+
+    void on_actionIR_RGB_Calibration_triggered();
+
+    void on_actionSimulator_Mode_triggered();
 
 private:
     bool m_heartbeatEnabled;

@@ -48,6 +48,9 @@ This file is part of the QGROUNDCONTROL project
  * It can superimpose the HUD over the current live image stream (any arriving image stream will be auto-
  * matically used as background), or it draws the classic blue-brown background known from instruments.
  */
+
+using namespace std;
+
 class HUD : public QLabel
 {
     Q_OBJECT

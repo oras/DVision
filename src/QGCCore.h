@@ -52,11 +52,18 @@ This file is part of the PIXHAWK project
  * the central management unit of the groundstation application.
  *
  **/
+
+
+
 class QGCCore : public QApplication
 {
     Q_OBJECT
 
+
+
 public:
+    static bool SIMULATOR;
+
     QGCCore(int &argc, char* argv[]);
     ~QGCCore();
 
@@ -77,5 +84,7 @@ private:
     MainWindow* mainWindow;
     QGCMouseWheelEventFilter *m_mouseWheelFilter;
 };
+
+
 
 #endif /* _CORE_H_ */

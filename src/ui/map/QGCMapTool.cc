@@ -33,6 +33,8 @@ QGCMapTool::QGCMapTool(QWidget *parent) :
     {
         activeUASSet(UASManager::instance()->getActiveUAS());
     }
+
+
 }
 
 void QGCMapTool::setMapZoom(int zoom)

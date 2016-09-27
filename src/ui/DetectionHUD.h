@@ -1,11 +1,12 @@
 #ifndef DETECTION_HUD
 #define DETECTION_HUD
 
-#include <GraphicsCompute.h>
+
 #include <QtWidgets/QWidget>
 #include <ImgRecoTool.h>
 #include <qgraphicsview.h>
 #include <VStreamSimulator.h>
+#include <CameraCapture.h>
 #include <time.h>
 #include <QThread>
 #include <math.h>
@@ -27,6 +28,7 @@ public:
     ~DetectionHUD();
     QImage* getImage();
     QImage img;
+    Mat matImg;
 private:
     const int NUM_SECONDS=pow(10,6);
     Ui::DetectionHUD *ui;
@@ -37,6 +39,7 @@ private:
     clock_t thisTime, lastTime;
     QThread thread;
     WarnSound* warn;
+    vector<Circ> vCircle;
 
 
     // Set the detection layers
@@ -46,8 +49,8 @@ public slots:
     void streamImage(const QImage &image);
     /** @brief Video stream has been disconnected */
     void videoStreamDisconnected();
-    /** @brief Video stream frame ready for update */
-    void imageReady(const QImage &img);
+    /** @brief image graphic information ready for update */
+    void imgInfoReady();
 signals:
     void startCompute();
 

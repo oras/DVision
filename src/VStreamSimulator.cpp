@@ -4,7 +4,9 @@
 #include "VStreamSimulator.h"
 #include <UASManager.h>
 #include <LinkManager.h>
-
+#include <MainWindow.h>
+#include <DeviceCaptureSettings.h>
+#include "QGCCore.h"
 
 VStreamSimulator* VStreamSimulator::instance(){
     static VStreamSimulator* _instance=0;
@@ -22,21 +24,25 @@ VStreamSimulator* VStreamSimulator::instance(){
 VStreamSimulator::VStreamSimulator(QObject *parent)
     :QThread(parent)
 {
-    go=true;
-    con=false;
-    link=NULL;
+        filename="/home/or/Videos/Drone_fire_demo.mp4";
+        go=true;
+        con=false;
+        link=NULL;
 
-    connect(UASManager::instance(),SIGNAL(UASCreated(UASInterface*)),this,SLOT(UASCreated(UASInterface*)));
-    connect(LinkManager::instance(),SIGNAL(messageReceived(LinkInterface*,mavlink_message_t)),this,SLOT(messageReceived(LinkInterface*,mavlink_message_t)));
+        connect(UASManager::instance(),SIGNAL(UASCreated(UASInterface*)),this,SLOT(UASCreated(UASInterface*)));
+        connect(LinkManager::instance(),SIGNAL(messageReceived(LinkInterface*,mavlink_message_t)),this,SLOT(messageReceived(LinkInterface*,mavlink_message_t)));
 
-    start(LowPriority);
+        start(LowPriority);
+
 }
 
 void VStreamSimulator::streamVideo()
 {
+    bool finished=false;
+
     int delay = (1000/frameRate);
-    while(this->con){
-        if (!capture.read(frame))
+    while(con && QGCCore::SIMULATOR){
+        if (!(finished=capture.read(frame)))
         {
             this->con = true;
         }
@@ -52,9 +58,15 @@ void VStreamSimulator::streamVideo()
         }
         emit streamImage(img);
         this->msleep(delay);
+
+        if(!finished)
+        {
+            openVideoStream(filename);
+        }
     }
 
-    emit videoStreamDisconnected();
+    if(QGCCore::SIMULATOR)
+        emit videoStreamDisconnected();
 
 }
 
@@ -95,7 +107,7 @@ void VStreamSimulator::msleep(int ms){
 }
 
 void VStreamSimulator::run(){
-     String filename="/home/or/Videos/Drone_fire_demo.mp4";
+
 
      while(go){
         if(link!=NULL){
@@ -140,3 +152,4 @@ void VStreamSimulator::messageReceived(LinkInterface *link, mavlink_message_t me
        }
     }
 }
+

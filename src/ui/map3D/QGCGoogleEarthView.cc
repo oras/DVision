@@ -360,6 +360,7 @@ void QGCGoogleEarthView::setHome(double lat, double lon, double alt)
 void QGCGoogleEarthView::setHome()
 {
     javaScript(QString("enableSetHomeMode();"));
+
 }
 
 void QGCGoogleEarthView::moveToPosition()
@@ -430,6 +431,10 @@ void QGCGoogleEarthView::showEvent(QShowEvent* event)
 void QGCGoogleEarthView::printWinException(int no, QString str1, QString str2, QString str3)
 {
     QLOG_DEBUG() << no << str1 << str2 << str3;
+}
+
+void QGCGoogleEarthView::markFire(){
+    JavaScript(QString("createCircle()"));
 }
 
 QVariant QGCGoogleEarthView::javaScript(QString javaScript)
@@ -601,6 +606,9 @@ void QGCGoogleEarthView::initializeGoogleEarth()
             follow(this->followCamera);
 
             // Move to home location
+
+
+
             goHome();
         }
     }

@@ -39,6 +39,8 @@ This file is part of the PIXHAWK project
 #include "QGCMAVLink.h"
 #include "QGC.h"
 
+using namespace std;
+
 class Waypoint : public QObject
 {
     Q_OBJECT

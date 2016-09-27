@@ -86,6 +86,7 @@ This file is part of the QGROUNDCONTROL project
 #include <QGCHilLink.h>
 #include <QGCHilConfiguration.h>
 #include <QGCHilFlightGearConfiguration.h>
+#include "QGCCore.h"
 
 
 
@@ -186,7 +187,6 @@ MainWindow::MainWindow(QWidget *parent):
 
     centerStack = new QStackedWidget(this);
     setCentralWidget(centerStack);
-
 
     // Load Toolbar
 #ifdef QGC_TOOLBAR_ENABLED
@@ -383,8 +383,24 @@ MainWindow::MainWindow(QWidget *parent):
     }
     settings.endGroup();
 
+    irc=new IRCalibration(this);
+    irc->setWindowFlags( Qt::Window);
+
+    QLOG_INFO() << "Start Event Detection instance and set to hold";
+    EventsDetection::instance(this);
+
+    dcSet=new DeviceCaptureSettings(this);
+    dcSet->setWindowFlags(Qt::Window);
+
     hud=new DetectionHUD(this);
     hud->setWindowFlags( Qt::Window);
+
+    ir=new IR(this);
+    ir->setWindowFlags( Qt::Window);
+
+
+
+
 }
 
 MainWindow::~MainWindow()
@@ -2594,4 +2610,35 @@ void MainWindow::on_actionDetection_HUD_triggered(){
     else{
        hud->show();
     }
+}
+
+void MainWindow::on_actionShow_IR_Monitor_triggered()
+{
+    if(ir->isVisible()){
+
+        ir->close();
+    }
+    else{
+       ir->show();
+    }
+}
+
+void MainWindow::on_actionIR_RGB_Calibration_triggered()
+{
+    if(irc->isVisible()){
+
+        irc->close();
+    }
+    else{
+       irc->show();
+    }
+}
+
+void MainWindow::on_actionSimulator_Mode_triggered()
+{
+    if(QGCCore::SIMULATOR)
+        QGCCore::SIMULATOR=false;
+
+   else
+        QGCCore::SIMULATOR=true;
 }

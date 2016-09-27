@@ -126,6 +126,8 @@ public slots:
     void loadSettings();
     /** @brief Store the settings for this widget to disk */
     void storeSettings();
+    /** @brief Draw circle for map marking */
+    void drawCircle();
 
 protected slots:
     /** @brief Convert a map edit into a QGC waypoint event */

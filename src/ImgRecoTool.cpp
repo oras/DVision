@@ -12,6 +12,7 @@
 #include "ImgRecoTool.h"
 #include <QtGlobal>
 #include <QtDebug>
+#include "QGCCore.h"
 
 namespace irt{
 
@@ -260,7 +261,7 @@ namespace irt{
         return head;
     }
 
-    Point *ImgRecoTool::pointInSquare(int x, int y, Node *squares){
+    cv::Point *ImgRecoTool::pointInSquare(int x, int y, Node *squares){
         for(Node *p=squares;p!=NULL;p=p->next){
             if(p->point!=NULL)
                 if(x>=p->point[0].x&&x<=p->point[1].x&&y>=p->point[0].y&&y<=p->point[1].y){
@@ -307,7 +308,7 @@ namespace irt{
         src_gray=getImageChannel(src,2);
 
         //Reduce noise with a kernel 3x3
-        blur(src_gray, detected_edges, Size(3,3) );
+        blur(src_gray, detected_edges, cv::Size(3,3) );
 
         //Canny detector.
         Canny(detected_edges,detected_edges,lowThreshold,lowThreshold*ratio,kernel_size);
@@ -329,10 +330,13 @@ namespace irt{
  */
 
     QImage ImgRecoTool::cvMatToQImage(const Mat &inMat){
+
+
      switch (inMat.type()){
         // 8-bit, 4 channel
         case CV_8UC4:{
            QImage image( inMat.data, inMat.cols, inMat.rows, inMat.step, QImage::Format_RGB32 );
+
 
            return image;
         }
@@ -340,6 +344,8 @@ namespace irt{
         // 8-bit, 3 channel
         case CV_8UC3:{
            QImage image( inMat.data, inMat.cols, inMat.rows, inMat.step, QImage::Format_RGB888 );
+
+
 
            return image.rgbSwapped();
         }
@@ -358,6 +364,7 @@ namespace irt{
 
            image.setColorTable( sColorTable );
 
+
            return image;
         }
 
@@ -366,17 +373,29 @@ namespace irt{
            break;
      }
 
+
      return QImage();
     }
 
-    Mat ImgRecoTool::QImageToCvMat( const QImage &inImage, bool inCloneImageData)
+    Mat ImgRecoTool::QImageToCvMat(const QImage &inImage, bool inCloneImageData)
        {
+       // if(m_pauseRequired)
+       //     m_pauseManager.wait(&m_continue);
+
+       // m_pauseRequired=true;
+
+
           switch ( inImage.format() )
           {
              // 8-bit, 4 channel
              case QImage::Format_RGB32:
              {
                 cv::Mat  mat( inImage.height(), inImage.width(), CV_8UC4, const_cast<uchar*>(inImage.bits()), inImage.bytesPerLine() );
+
+               // m_pauseRequired=false;
+               // m_pauseManager.wakeAll();
+
+                m_continue.unlock();
 
                 return (inCloneImageData ? mat.clone() : mat);
              }
@@ -387,15 +406,24 @@ namespace irt{
                 if ( !inCloneImageData )
                    qWarning() << "ASM::QImageToCvMat() - Conversion requires cloning since we use a temporary QImage";
 
-                QImage   swapped = inImage.rgbSwapped();
 
-                return cv::Mat( swapped.height(), swapped.width(), CV_8UC3, const_cast<uchar*>(swapped.bits()), swapped.bytesPerLine() ).clone();
-             }
+                return Mat(inImage.height(), inImage.width(), CV_8UC3, const_cast<uchar*>(inImage.rgbSwapped().bits()), inImage.rgbSwapped().bytesPerLine()).clone();
+
+
+               //m_continue.unlock();
+
+
+          }
 
              // 8-bit, 1 channel
              case QImage::Format_Indexed8:
              {
                 cv::Mat  mat( inImage.height(), inImage.width(), CV_8UC1, const_cast<uchar*>(inImage.bits()), inImage.bytesPerLine() );
+
+               // m_pauseRequired=false;
+              //  m_pauseManager.wakeAll();
+
+                m_continue.unlock();
 
                 return (inCloneImageData ? mat.clone() : mat);
              }
@@ -404,6 +432,11 @@ namespace irt{
                 qWarning() << "ASM::QImageToCvMat() - QImage format not handled in switch:" << inImage.format();
                 break;
           }
+
+         // m_pauseRequired=false;
+        //  m_pauseManager.wakeAll();
+
+        m_continue.unlock();
 
           return Mat();
     }
@@ -535,7 +568,7 @@ namespace irt{
         return root;
     }
 
-    bool ImgRecoTool::markCircleOnFlame(Mat &src,Node* squares, Horizon* horizon){
+    vector<Circ>* ImgRecoTool::markCircleOnFlame(Mat &src, Mat &srcIR,Node* squares, Horizon* horizon,int dx, int dy){
         bool warning=false;
         vector<Circ>* vCircle=new vector<Circ>();
 
@@ -548,9 +581,9 @@ namespace irt{
 
         float r,g,b, gr, br;
 
-        cv::Point* point=new Point[2];
+        cv::Point* point=new cv::Point[2];
 
-        for(const Node *p=squares;p!=NULL;p=p->next){
+        for(const Node *p=squares;p!=NULL&&p->point!=NULL;p=p->next){
 
 
             int xSum=0;
@@ -573,7 +606,7 @@ namespace irt{
 
                     if((pointUnderHorizon(j,i,horizon->getPrevHorizonPoint(j,src.cols),horizon->getForwardHorizonPoint(j,src.cols)))&&
                             /*(((r>=minR && r<=maxR) && (g>=minG && g<=maxG) && (b>=minB && b<=maxB)) ||*/
-                            ((gr>=0.4 && gr<=0.99) && (br>=0 && br<=0.56) && (r>179) && (g<238) && (b<130))){
+                            ((gr>=0.4 && gr<=0.99) && (br>=0 && br<=0.56) && (r>179) && (g<238) && (b<130))){//&& isHotZone(srcIR,i,j,dx,dy)){
 
 
                       if(i>yBigest)
@@ -608,9 +641,9 @@ namespace irt{
             }
         }
 
-        drawCircles(vCircle,src);
+        //drawCircles(vCircle,src);
 
-        return warning;
+        return vCircle;
     }
 
     bool ImgRecoTool::pointUnderHorizon(const int &x,const int &y,const cv::Point* h1,const cv::Point* h2){
@@ -630,8 +663,8 @@ namespace irt{
     }
 
     void ImgRecoTool::releaseHRoot(cv::Point *root){
-       delete[] root;
-       root=NULL;
+        if(root!=NULL)
+            delete[] root;
     }
 
     bool ImgRecoTool::circleIsContained(Circ &c1, Circ &c2){
@@ -647,7 +680,9 @@ namespace irt{
          * sqrt((x1-x2)^2)+((y1-y2)^2))+c1.rad<=c2.rad
          */
 
-        if((sqrt(pow(x1-x2,2)+pow(y1-y2,2))+r1)<=r2);
+        int length=sqrt((double)pow(x1-x2,2)+(double)pow(y1-y2,2));
+
+        if((length+r1)<=r2)
             return true;
 
         return false;
@@ -670,7 +705,7 @@ namespace irt{
          *
          */
 
-        if((pow(x1-x2,2)+pow(y1-y2,2))<=pow(r2,2))
+        if((double(pow(x1-x2,2))+double(pow(y1-y2,2)))<=double(pow(r2,2)))
             return true;
 
         return false;
@@ -690,14 +725,30 @@ namespace irt{
         return (Circ*)ImgToolFactory::makeObject(CIRCLE,point);
     }
 
-    void ImgRecoTool::drawCircles(vector<Circ> *v,Mat &src){
+    void ImgRecoTool::drawCircles(const vector<Circ> *v,Mat &src){
         const int R=112, G=238, B=28;
 
-          for( typename vector<Circ>::iterator it=v->begin(); it!=v->end();it++){
+        vector<Circ>* dV=const_cast<vector<Circ>*>(v);
+
+          for( typename vector<Circ>::iterator it=dV->begin(); it!=dV->end();it++){
               circle(src,(&(*it))->getCircleCentralPoint(),(&(*it))->getCircleRadios(),Scalar(R,G,B),2,8,0);
 
           }
     }
+
+    bool ImgRecoTool::isHotZone(Mat &src,int r, int c,int dx, int dy){
+        // Blue color
+        int R=35;
+
+        if(((r-dy)>=0) && ((r-dy)<src.rows)&&((c-dx)>=0)&&((c-dx)<=src.cols)){
+            if(src.at<Vec3b>(r-dy,c-dx)[2]>=R || QGCCore::SIMULATOR)
+                return true;
+
+        }
+        return false;
+    }
+
+
 
 }
 

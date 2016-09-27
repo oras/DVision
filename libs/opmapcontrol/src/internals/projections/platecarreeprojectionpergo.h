@@ -36,13 +36,13 @@ class PlateCarreeProjectionPergo:public internals::PureProjection
 public:
     PlateCarreeProjectionPergo();
     virtual QString Type(){return "PlateCarreeProjectionPergo";}
-    virtual Size TileSize() const;
+    virtual core::Size TileSize() const;
     virtual double Axis() const;
     virtual double Flattening()const;
     virtual core::Point FromLatLngToPixel(double lat, double lng, int const& zoom);
     virtual internals::PointLatLng FromPixelToLatLng(const int &x,const int &y,const int &zoom);
-    virtual  Size GetTileMatrixMinXY(const int &zoom);
-    virtual  Size GetTileMatrixMaxXY(const int &zoom);
+    virtual  core::Size GetTileMatrixMinXY(const int &zoom);
+    virtual  core::Size GetTileMatrixMaxXY(const int &zoom);
 private:
     const double MinLatitude;
     const double MaxLatitude;
@@ -50,7 +50,7 @@ private:
     const double MaxLongitude;
 
     double Clip(double const& n, double const& minValue, double const& maxValue)const;
-    Size tileSize;
+    core::Size tileSize;
 };
 }
 #endif // PLATECARREEPROJECTIONPERGO_H

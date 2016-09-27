@@ -70,6 +70,8 @@ int main(int argc, char *argv[])
 #endif
 
     QGCCore core(argc, argv);
+
+
     // init the logging mechanism
     QsLogging::Logger& logger = QsLogging::Logger::instance();
     logger.setLoggingLevel(QsLogging::DebugLevel);

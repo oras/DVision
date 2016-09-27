@@ -467,7 +467,7 @@ function createTrail(id, color)
 	lineStyle = trailPlacemarks[id].getStyleSelector().getLineStyle();
 	lineStyle.setWidth(5);
 	trailColors[id] = color;
-	lineStyle.getColor().set('00000000');  // aabbggrr format
+	lineStyle.getColor().set('00000000');  // aabbggrr format
 
 	trailsVisible[id] = false;
 }
@@ -491,7 +491,7 @@ function createWaypointLine(id, color)
 	lineStyle = waypointLinePlacemarks[id].getStyleSelector().getLineStyle();
 	lineStyle.setWidth(15);
 	waypointLineColors[id] = color;
-	lineStyle.getColor().set(color);  // aabbggrr format
+	lineStyle.getColor().set(color);  // aabbggrr format
 
         
 
@@ -499,8 +499,8 @@ function createWaypointLine(id, color)
         //waypointLinePlacemarks[id].setStyleSelector(ge.createStyle(''));
         //lineStyle = waypointLinePlacemarks[id].getStyleSelector().getLineStyle();
         //lineStyle.setWidth(15);
-        //lineStyle.getColor().set(waypointLineColors[id]);  // aabbggrr format
-        //lineStyle.getColor().set(color);  // aabbggrr format
+        //lineStyle.getColor().set(waypointLineColors[id]);  // aabbggrr format
+        //lineStyle.getColor().set(color);  // aabbggrr format
 
 	// Add the feature to Earth
 	ge.getFeatures().appendChild(waypointLinePlacemarks[id]);
@@ -547,7 +547,7 @@ function addTrailPosition(id, lat, lon, alt)
     trailPlacemarks[id].setStyleSelector(ge.createStyle(''));
     lineStyle = trailPlacemarks[id].getStyleSelector().getLineStyle();
     lineStyle.setWidth(5);
-    lineStyle.getColor().set(trailColors[id]);  // aabbggrr format
+    lineStyle.getColor().set(trailColors[id]);  // aabbggrr format
 }
 
 function initCallback(object)
@@ -698,6 +698,19 @@ function setViewMode(mode)
 	viewMode = mode;
 	
 	ge.getView().setAbstractView(currView);
+}
+
+function createCircle(){
+      var cityCircle = new google.maps.Circle({
+      strokeColor: '#FF0000',
+      strokeOpacity: 0.8,
+      strokeWeight: 2,
+      fillColor: '#FF0000',
+      fillOpacity: 0.35,
+      map: ge.map,
+      center: {lat: -35.363, lng: 149.148},
+      radius: 100
+    });
 }
 
 function updateFollowAircraft()

@@ -33,39 +33,60 @@ using namespace cv;
 class EventsDetection : public QThread{
     Q_OBJECT
 private:
+    const int NUM_SECONDS=pow(10,6);
     Event* head;
     Horizon* horizon;
-    QImage img;
-    bool imgReady, go;
+    QImage img,imgIR;
+    bool imgReady,imgIRReady, go;
     bool soundWarn;
     cv::Point *hRoot;
-    Node* root;
+    irt::Node* root;
     WarnSound* warn;
-    bool m_pauseRequired;
+    bool m_pauseRequired,mIR_pauseRequired;
     QMutex m_continue;
     QMutex mutex;
-    QWaitCondition m_pauseManager;
+    QWaitCondition mIR_pauseManager,m_pauseManager;
+    clock_t thisTime, lastTime;
+    std::vector<Circ>* vCircle;
+    Mat matImg,matImgIR;
+    int diffX, diffY;
+
 
 public:
-    static EventsDetection* instance();
+    static EventsDetection* instance(QObject *parent=0);
     ~EventsDetection();
 
     void registerNewEventToDetect(string name);
 
     void pause();
 
+    void pauseIR();
+
     bool isPause();
+
+    bool isPauseIR();
 
     void resume();
 
+    void resumeIR();
+
     void startDetection();
+
+    std::vector<Circ> getCircleVector();
 public slots:
     /** @brief Update image from video stream */
     void streamImage(const QImage &image);
+
+    void streamImageIR(const QImage &image);
+
     /** @brief Video stream has been disconnected */
     void videoStreamDisconnected();
+
+    void updateImageIRDiff(const cv::Point p);
 signals:
-    void imageReady(const QImage &img);
+    void imageReady(const QImage img);
+
+    void imgInfoReady();
 private:
     //void logEvent(Event *event);
 
@@ -82,6 +103,8 @@ private:
     //void stop();
 
     EventsDetection(QObject *parent=0);
+
+    void loadDiskDefaultImg();
 protected:
 };
 

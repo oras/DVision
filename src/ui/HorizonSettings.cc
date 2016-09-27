@@ -5,7 +5,7 @@
 #include <QFileDialog>
 #include <QTextStream>
 
-HorizonSettings::HorizonSettings(QWidget *parent,Node *head) :
+HorizonSettings::HorizonSettings(QWidget *parent,irt::Node *head) :
     QDialog(parent),
     ui(new Ui::HorizonSettings){
     ui->setupUi(this);
@@ -81,7 +81,7 @@ void HorizonSettings::loadDiskDefaultImg(){
     if(mFile.open(QIODevice::ReadOnly)){
         QTextStream in(&mFile);
 
-        this->default_img=in.readLine();
+        this->default_img="/home/or/Pictures/2wa.jpg";
 
         mFile.close();
     }

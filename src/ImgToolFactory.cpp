@@ -20,3 +20,5 @@ ImgToolFactory* ImgToolFactory::makeObject(int name,cv::Point *point){
 }
 
 
+
+

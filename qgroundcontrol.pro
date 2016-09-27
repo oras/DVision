@@ -459,7 +459,10 @@ FORMS += \
     src/ui/DroneshareDialog.ui \
     src/ui/Analyze3d.ui \
     src/ui/DHUD.ui \
-    src/ui/DetectionHUD.ui
+    src/ui/DetectionHUD.ui \
+    src/ui/IR.ui \
+    src/ui/IRCalibration.ui \
+    src/ui/DeviceCaptureSettings.ui
 
 HEADERS += \
     src/MG.h \
@@ -686,7 +689,6 @@ HEADERS += \
     src/ui/FireHeatReco.h \
     src/ui/FireSmokeReco.h \
     src/ui/HorizonSettings.h \
-    src/ui/VideoCapt.h \
     src/Event.h \
     src/EventFactory.h \
     src/EventsDetection.h \
@@ -696,15 +698,15 @@ HEADERS += \
     src/ui/DroneshareDialog.h \
     src/Player.h \
     src/ui/HUD.h \
-    src/ui/Analyze3D.h \
-    src/ui/MyGLWidget.h \
     src/ui/submainwindow.h \
     src/VStreamSimulator.h \
-    src/ui/DHUD.h \
     src/ui/DetectionHUD.h \
-    src/GraphicsCompute.h \
     src/ImgToolFactory.h \
-    src/WarnSound.h
+    src/WarnSound.h \
+    src/CameraCapture.h \
+    src/ui/IR.h \
+    src/ui/IRCalibration.h \
+    src/ui/DeviceCaptureSettings.h
 
 SOURCES += src/main.cc \
     src/QGCCore.cc \
@@ -925,7 +927,6 @@ SOURCES += src/main.cc \
     src/ui/FireHeatReco.cpp \
     src/ui/FireSmokeReco.cc \
     src/ui/HorizonSettings.cc \
-    src/ui/VideoCapt.cc \
     src/Event.cpp \
     src/Horizon.cpp \
     src/ImgRecoTool.cpp \
@@ -933,15 +934,15 @@ SOURCES += src/main.cc \
     src/ui/DroneshareDialog.cc \
     src/Player.cpp \
     src/VStreamSimulator.cpp \
-    src/ui/Analyze3D.cpp \
-    src/ui/MyGLWidget.cpp \
     src/ui/submainwindow.cpp \
     src/EventsDetection.cpp \
-    src/ui/DHUD.cpp \
     src/ui/DetectionHUD.cpp \
-    src/GraphicsCompute.cpp \
     src/ImgToolFactory.cpp \
-    src/WarnSound.cpp
+    src/WarnSound.cpp \
+    src/CameraCapture.cpp \
+    src/ui/IR.cpp \
+    src/ui/IRCalibration.cpp \
+    src/ui/DeviceCaptureSettings.cpp
 
 MacBuild | WindowsBuild : contains(GOOGLEEARTH, enable) { #fix this to make sense ;)
     message(Including support for Google Earth)
@@ -1012,7 +1013,7 @@ DISTFILES += \
 
 INCLUDEPATH += /usr/local/include/opencv
 
-LIBS += -L/usr/local/lib -lopencv_core -lopencv_imgproc -lopencv_imgcodecs -lopencv_highgui -lopencv_videoio -lopencv_shape -lopencv_stitching -lopencv_objdetect -lopencv_superres -lopencv_videostab -lopencv_calib3d -lopencv_features2d -lopencv_video -lopencv_photo -lopencv_ml -lopencv_flann -lopencv_hal
+LIBS += -L/usr/local/lib -lopencv_core -lopencv_imgproc -lopencv_imgcodecs -lopencv_highgui -lopencv_videoio -lopencv_shape -lopencv_stitching -lopencv_objdetect -lopencv_superres -lopencv_videostab -lopencv_calib3d -lopencv_features2d -lopencv_video -lopencv_photo -lopencv_ml -lopencv_flann
 
 QT += core gui multimedia
 

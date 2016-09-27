@@ -395,7 +395,7 @@ namespace mapcontrol
                                             found = true;
                                         {
                                             painter->drawPixmap(core->tileRect.X(),core->tileRect.Y(), core->tileRect.Width(), core->tileRect.Height(),PureImageProxy::FromStream(img));
-                                           // qDebug()<<"tile:"<<core->tileRect.X()<<core->tileRect.Y();
+                                            qDebug()<<"tile:"<<core->tileRect.X()<<core->tileRect.Y();
                                         }
                                     }
                                 }
@@ -441,6 +441,24 @@ namespace mapcontrol
                                 painter->setBrush(QBrush(QColor(50,50,100,20)));
                                 painter->drawRect(x1,y1,x2-x1,y2-y1);
                             }
+
+
+                            //Debug test for drawing
+
+
+                              painter->setRenderHint(QPainter::Antialiasing, true);
+
+                              QBrush brush(QColor(255, 0, 0, 60));
+                              painter->setBrush(brush);
+                            QPoint* c=new QPoint(core->tileRect.X(),core->tileRect.Y());
+                            double pTo100m=core->pxRes100m;
+                            int pixalSize=200*float(pTo100m/100);
+
+                            if(pixalSize<15)
+                                pixalSize=15;
+
+
+                            //painter->drawEllipse(*c,pixalSize,pixalSize);
                         }
                     }
                 }
